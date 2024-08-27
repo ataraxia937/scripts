@@ -80,6 +80,12 @@ XClock*render:true
 XClock*strftime:%a %b %e %l:%M
 XDEFAULTS
 
+mkdir -p /home/ataraxia/.config/gtk-3.0
+cat > /home/ataraxia/.config/gtk-3.0/settings.ini <<GTK
+[Settings]
+gtk-font-name = Sans 11
+GTK
+
 cat > /home/ataraxia/.xsession <<XSESSION
 export LC_CTYPE="en_US.UTF-8"
 setxkbmap -option compose:caps
