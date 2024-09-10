@@ -83,6 +83,7 @@ XDEFAULTS
 mkdir -p /home/ataraxia/.config/gtk-3.0
 cat > /home/ataraxia/.config/gtk-3.0/settings.ini <<GTK
 [Settings]
+gtk-cursor-theme-name = Adwaita
 gtk-font-name = Sans 11
 GTK
 
