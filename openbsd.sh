@@ -10,7 +10,7 @@ pkg_add ffmpeg firefox
 rcctl enable unwind #messagebus avahi_daemon cupsd
 rcctl start unwind #messagebus avahi_daemon cupsd
 
-sed -i -e 's/datasize-cur=1536M/datasize-cur=infinity/' /etc/login.conf
+sed -i -e '73s/1536M/infinity/' /etc/login.conf
 
 # 85 is too loud, 64 is too quiet
 echo 'outputs.master=75' > /etc/mixerctl.conf
