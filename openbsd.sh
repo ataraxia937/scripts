@@ -42,7 +42,10 @@ PS1='\u:\w:\!:\\$ '
 alias ls='ls -F'
 ROOTPROFILE
 
-echo 'gap 36 0 0 0' > /home/ataraxia/.cwmrc
+cat > /home/ataraxia/.cwmrc <<CWM
+gap 36 0 0 0
+ignore clock
+CWM
 
 cat >> /home/ataraxia/.profile <<USERPROFILE
 umask 077
