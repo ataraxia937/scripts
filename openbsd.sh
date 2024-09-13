@@ -23,7 +23,7 @@ hostname lunaria
 cat > /etc/hosts <<HOSTS
 127.0.0.1       localhost lunaria
 ::1             localhost lunaria
-#192.168.0.35    printer.local printer
+192.168.0.35    printer.local printer
 HOSTS
 
 cat > /etc/daily.local <<DAILY
@@ -42,10 +42,10 @@ PS1='\u:\w:\!:\\$ '
 alias ls='ls -F'
 ROOTPROFILE
 
-cat > /home/ataraxia/.cwmrc <<CWM
-gap 36 0 0 0
-ignore clock
-CWM
+#cat > /home/ataraxia/.cwmrc <<CWM
+#gap 36 0 0 0
+#ignore xclock
+#CWM
 
 cat >> /home/ataraxia/.profile <<USERPROFILE
 umask 077
@@ -95,7 +95,7 @@ export LC_CTYPE="en_US.UTF-8"
 setxkbmap -option compose:caps
 xset s off
 xset dpms 0 0 0
-xclock -geometry -0+0 &
+#xclock -geometry -0+0 &
 xterm -geometry +0+0 &
 xterm -geometry +0-0 &
 firefox &
