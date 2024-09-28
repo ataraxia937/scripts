@@ -24,6 +24,13 @@ cat > /etc/hosts <<HOSTS
 ::1             localhost lunaria
 HOSTS
 
+cat > /etc/pf.conf <<PF
+set skip on lo
+block return log
+pass out
+pass proto {icmp icmp6}
+PF
+
 cat > /etc/daily.local <<DAILY
 syspatch
 fw_update
