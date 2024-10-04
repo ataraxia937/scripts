@@ -6,6 +6,8 @@ syspatch || true
 
 pkg_add ffmpeg firefox
 
+chmod 600 /usr/bin/bin/dbus-launch
+
 rcctl enable unwind
 rcctl start unwind
 
