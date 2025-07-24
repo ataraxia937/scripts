@@ -23,3 +23,4 @@ EOF
 
 sudo dnf -y install code
 
+restic restore latest -t /
