@@ -8,7 +8,7 @@ sudo sysctl -p
 
 sudo dnf -y update
 
-sudo dnf -y install cargo dotnet-sdk-8.0 fish gh golang google-chrome-stable node pylint restic rust-src rustfmt shellcheck typescript vim-default-editor yarnpkg
+sudo dnf -y install atuin cargo dotnet-sdk-8.0 gh golang google-chrome-stable node pylint restic rust-src rustfmt shellcheck typescript vim-default-editor yarnpkg
 
 sudo tee /etc/yum.repos.d/vscode.repo <<EOF
 [code]
@@ -23,4 +23,3 @@ EOF
 
 sudo dnf -y install code
 
-chsh -s /bin/fish
