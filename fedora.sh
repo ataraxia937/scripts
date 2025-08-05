@@ -8,7 +8,7 @@ sudo sysctl -p
 
 sudo dnf -y update
 
-sudo dnf -y install atuin cargo clippy dotnet-sdk-8.0 gh golang google-chrome-stable node pylint restic rust-src rustfmt shellcheck typescript vim-default-editor wine yarnpkg
+sudo dnf -y install atuin cargo clippy dotnet-sdk-8.0 gh golang google-chrome-stable node pylint restic rust-src rustfmt shellcheck typescript vim-default-editor wine wireguard-tools yarnpkg
 
 sudo tee /etc/yum.repos.d/vscode.repo <<EOF
 [code]
@@ -24,3 +24,9 @@ EOF
 sudo dnf -y install code
 
 restic restore latest -t /
+
+# Download VPN config file from Proton VPN
+# Move it to /etc/wireguard and make it root:root 600
+# Rename it to wg0.conf
+systemctl enable --now wg-quick@wg0
+
