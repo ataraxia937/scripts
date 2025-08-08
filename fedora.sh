@@ -25,9 +25,3 @@ sudo dnf -y install code
 
 restic restore latest -t /
 
-# Download VPN config file from Proton VPN
-# Move it to /etc/wireguard and make it root:root 600
-# Rename it to wg0.conf
-sudo restorecon -Rv /etc/wireguard
-systemctl enable --now wg-quick@wg0
-
