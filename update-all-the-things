@@ -1,0 +1,27 @@
+#!/bin/bash -l
+
+set -x
+
+# Should run before cargo-update
+rustup update
+
+# Should run before mise
+cargo install-update -a
+
+declare -F mise && mise upgrade
+
+npm -g upgrade
+
+dotnet tool update -g --all
+
+go-global-update
+
+code --update-extensions
+
+atuin update
+
+# Flatpak update if Flatpak is installed
+[[ -x "$(command -v flatpak)" ]] && flatpak update -y
+
+# Should be last, as it's disruptive
+bash "$HOME/.local/share/blesh/ble.sh" --update
