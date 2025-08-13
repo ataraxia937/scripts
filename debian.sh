@@ -11,7 +11,7 @@ sudo sysctl -p
 sudo apt -y update
 sudo apt -y upgrade
 
-sudo apt -y install apt-file build-essentials curl git restic vim xxd
+sudo apt -y install apt-file build-essential curl git restic vim xxd
 sudo apt -y --purge autoremove nano
 
 cd /tmp || exit
