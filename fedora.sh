@@ -2,6 +2,7 @@
 
 echo '%wheel ALL=(ALL) NOPASSWD:/usr/bin/dnf update' | sudo tee /etc/sudoers.d/dnf
 sudo chmod 440 /etc/sudoers.d/dnf
+sudo visudo -c
 
 echo 'kernel.yama.ptrace_scope = 3' | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p
