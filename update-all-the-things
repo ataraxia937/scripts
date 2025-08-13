@@ -1,27 +1,32 @@
 #!/bin/bash -l
 
-set -x
+function format_output {
+    echo
+    echo -e "\e[96m==> Running $*:\e[0m"
+    "$@"
+    echo
+}
 
 # Should run before cargo-update
-rustup update
+format_output rustup update
 
 # Should run before mise
-cargo install-update -a
+format_output cargo install-update -a
 
-declare -F mise && mise upgrade
+declare -F mise >/dev/null && format_output mise upgrade
 
-npm -g upgrade
+format_output npm -g upgrade
 
-dotnet tool update -g --all
+format_output dotnet tool update -g --all
 
-go-global-update
+format_output go-global-update
 
-code --update-extensions
+format_output code --update-extensions
 
-atuin update
+format_output atuin update
 
 # Flatpak update if Flatpak is installed
-[[ -x "$(command -v flatpak)" ]] && flatpak update -y
+[[ -x "$(command -v flatpak)" ]] && format_output flatpak update -y
 
 # Should be last, as it's disruptive
-bash "$HOME/.local/share/blesh/ble.sh" --update
+format_output bash "$HOME/.local/share/blesh/ble.sh" --update
