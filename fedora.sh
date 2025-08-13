@@ -8,7 +8,7 @@ sudo sysctl -p
 
 sudo dnf -y update
 
-sudo dnf -y install cargo clippy dotnet-sdk-8.0 gh golang google-chrome-stable node restic rust-src rustfmt typescript vim-default-editor yarnpkg
+sudo dnf -y install google-chrome-stable restic vim-default-editor
 
 sudo tee /etc/yum.repos.d/vscode.repo <<EOF
 [code]
