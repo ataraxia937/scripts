@@ -11,8 +11,8 @@ sudo sysctl -p
 sudo apt -y update
 sudo apt -y upgrade
 
-sudo apt -y install apt-file build-essential curl fonts-noto git podman restic vim xxd
-sudo apt -y --purge autoremove nano fonts-dejavu\*
+sudo apt -y install apt-file build-essential curl fonts-noto git podman ptyxis restic vim xxd
+sudo apt -y --purge autoremove fonts-dejavu\* gnome-terminal nano
 
 cd /tmp || exit
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
