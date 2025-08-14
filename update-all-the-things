@@ -1,8 +1,7 @@
-#!/bin/bash -l
+#!/bin/sh
 
-function format_output {
-    echo
-    echo -e "\e[96m==> Running $*:\e[0m"
+format_output() {
+    printf "\n\033[96m==> Running %s:\033[0m\n" "$*"
     "$@"
     echo
 }
@@ -13,7 +12,7 @@ format_output rustup update
 # Should run before mise
 format_output cargo install-update -a
 
-declare -F mise >/dev/null && format_output mise upgrade
+command -v mise >/dev/null && format_output mise upgrade
 
 format_output npm -g upgrade
 
@@ -26,7 +25,7 @@ format_output code --update-extensions
 format_output atuin update
 
 # Flatpak update if Flatpak is installed
-[[ -x "$(command -v flatpak)" ]] && format_output flatpak update -y
+command -v flatpak >/dev/null && format_output flatpak update -y
 
 # Should be last, as it's disruptive
 format_output bash "$HOME/.local/share/blesh/ble.sh" --update
