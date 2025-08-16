@@ -11,7 +11,7 @@ sudo sysctl -p
 sudo apt -y update
 sudo apt -y upgrade
 
-sudo apt -y install apt-file build-essential curl fonts-noto git podman ptyxis restic vim wl-clipboard xxd
+sudo apt -y install apt-file build-essential curl fonts-noto git podman ptyxis python3-venv restic vim wl-clipboard xxd
 sudo apt -y --purge autoremove fonts-dejavu\* gnome-terminal nano xclip
 
 cd /tmp || exit
