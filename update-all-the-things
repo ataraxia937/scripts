@@ -27,5 +27,7 @@ format_output atuin update
 # Flatpak update if Flatpak is installed
 command -v flatpak >/dev/null && format_output flatpak update -y
 
+format_output fwupdmgr update
+
 # Should be last, as it's disruptive
 format_output bash "$HOME/.local/share/blesh/ble.sh" --update
