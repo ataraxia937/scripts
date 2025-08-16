@@ -12,7 +12,7 @@ format_output rustup update
 # Should run before mise
 format_output cargo install-update -a
 
-command -v mise >/dev/null && format_output mise upgrade
+format_output mise upgrade && eval $(mise hook-env)
 
 format_output npm -g upgrade
 
