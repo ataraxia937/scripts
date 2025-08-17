@@ -11,8 +11,10 @@ sudo sysctl -p
 sudo apt -y update
 sudo apt -y upgrade
 
-sudo apt -y install apt-file build-essential curl fonts-noto gawk git podman ptyxis python3-venv restic vim wl-clipboard xxd
+sudo apt -y install apt-file build-essential curl flatpak fonts-noto gawk git gnome-console podman python3-venv restic vim wl-clipboard xxd
 sudo apt -y --purge autoremove fonts-dejavu\* gnome-terminal nano xclip
+
+sudo flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
 cd /tmp || exit
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
