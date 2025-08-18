@@ -22,8 +22,6 @@ format_output go-global-update
 
 format_output code --update-extensions
 
-format_output atuin update
-
 # Flatpak update if Flatpak is installed
 command -v flatpak >/dev/null && format_output flatpak update -y
 
