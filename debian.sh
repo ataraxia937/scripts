@@ -17,12 +17,20 @@ sudo apt -y --purge autoremove fonts-dejavu\* gnome-terminal nano xclip
 sudo flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
 cd /tmp || exit
+
+# Chrome
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 sudo apt -y install ./google-chrome-stable_current_amd64.deb
 sudo /etc/cron.daily/google-chrome
 
+# VS Code
 wget -O vscode.deb 'https://go.microsoft.com/fwlink/?LinkID=760868'
 echo "code code/add-microsoft-repo boolean true" | sudo debconf-set-selections
 sudo apt -y install ./vscode.deb
+
+# Spotify
+curl -sS https://download.spotify.com/debian/pubkey_C85668DF69375001.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
+echo "deb https://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
+sudo apt-get update && sudo apt-get install spotify-client
 
 restic restore latest -t /
