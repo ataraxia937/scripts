@@ -5,7 +5,7 @@
 # including passwords.
 
 # This allows us to have a default profile just for this script.
-export AWS_PROFILE=backup
+export AWS_PROFILE=backups
 
 # Get the AWS region from the profile.
 # Restic will use us-east-1 by default, so we need to set it explicitly.
