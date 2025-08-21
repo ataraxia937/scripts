@@ -28,9 +28,4 @@ wget -O vscode.deb 'https://go.microsoft.com/fwlink/?LinkID=760868'
 echo "code code/add-microsoft-repo boolean true" | sudo debconf-set-selections
 sudo apt -y install ./vscode.deb
 
-# Spotify
-curl -sS https://download.spotify.com/debian/pubkey_C85668DF69375001.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
-echo "deb https://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
-sudo apt-get update && sudo apt-get install spotify-client
-
 restic restore latest -t /
