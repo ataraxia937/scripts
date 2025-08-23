@@ -11,7 +11,7 @@ sudo sysctl -p
 sudo apt -y update
 sudo apt -y upgrade
 
-sudo apt -y install apt-file build-essential curl fd-find flatpak fonts-noto fzf gawk git gnome-console imagemagick libsqlite3-dev luarocks needrestart-session podman python3-pip python3-pynvim python3-venv restic ruby ruby-dev sqlite3 vim xclip xxd
+sudo apt -y install apt-file build-essential curl fd-find flatpak fonts-noto fzf gawk git imagemagick libsqlite3-dev luarocks needrestart-session podman ptyxis python3-pip python3-pynvim python3-venv restic ruby ruby-dev sqlite3 vim xclip xxd
 sudo apt -y --purge autoremove fonts-dejavu\* gnome-terminal nano
 
 sudo flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo
