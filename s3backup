@@ -14,11 +14,11 @@ AWS_DEFAULT_REGION=$(aws configure get region)
 export AWS_DEFAULT_REGION
 
 # Get the credentials for the backup profile.
-creds=$(aws configure export-credentials --format env) || exit 1
+creds=$(aws configure export-credentials --format env) || aws sso login --sso-session ataraxia937 && creds=$(aws configure export-credentials --format env)
 eval "$creds"
 if [[ -z "$AWS_ACCESS_KEY_ID" || -z "$AWS_SECRET_ACCESS_KEY" || -z "$AWS_SESSION_TOKEN" ]]; then
-	echo "Failed to get AWS credentials for profile '$AWS_PROFILE'."
-	exit 1
+  echo "Failed to get AWS credentials for profile '$AWS_PROFILE'."
+  exit 1
 fi
 
 # The location of the restic repository.
@@ -26,55 +26,55 @@ fi
 export RESTIC_REPOSITORY="s3:s3.amazonaws.com/***REMOVED***"
 
 case "$1" in
-	prune)
-		# This is used to clean up old backups and check the repository.
-		# It will keep backups for the last 2 years and prune the rest.
-		set -e
-    # Read the password just once, so we can use it for all commands in this section.
-		read -s -r -p 'enter password for repository: ' RESTIC_PASSWORD
-		export RESTIC_PASSWORD
-		restic forget -g '' --keep-within 2y
-		restic prune
-		restic check
-		set +e
-		;;
-	mount)
-		# This is used to mount the repository on a temporary directory.
-		# It will create a temporary directory, mount the repository there, and open a file browser window on it.
-		# This is useful for browsing the backups without downloading them.
-		read -s -r -p 'enter password for repository: ' RESTIC_PASSWORD
-		export RESTIC_PASSWORD
-		mountpoint="$(mktemp -d)"
-		restic mount "$mountpoint" &
-		while ! [[ -d "$mountpoint/snapshots" ]]; do
-			sleep 1
-		done
-		xdg-open "$mountpoint"
-		wait
-		;;
-	restic)
-		# This allows us to run any restic command with the environment set up for us
-		"$@"
-		;;
-	'')
-		# This is the usual case, which runs a backup with the excludes file.
+prune)
+  # This is used to clean up old backups and check the repository.
+  # It will keep backups for the last 2 years and prune the rest.
+  set -e
+  # Read the password just once, so we can use it for all commands in this section.
+  read -s -r -p 'enter password for repository: ' RESTIC_PASSWORD
+  export RESTIC_PASSWORD
+  restic forget -g '' --keep-within 2y
+  restic prune
+  restic check
+  set +e
+  ;;
+mount)
+  # This is used to mount the repository on a temporary directory.
+  # It will create a temporary directory, mount the repository there, and open a file browser window on it.
+  # This is useful for browsing the backups without downloading them.
+  read -s -r -p 'enter password for repository: ' RESTIC_PASSWORD
+  export RESTIC_PASSWORD
+  mountpoint="$(mktemp -d)"
+  restic mount "$mountpoint" &
+  while ! [[ -d "$mountpoint/snapshots" ]]; do
+    sleep 1
+  done
+  xdg-open "$mountpoint"
+  wait
+  ;;
+restic)
+  # This allows us to run any restic command with the environment set up for us
+  "$@"
+  ;;
+'')
+  # This is the usual case, which runs a backup with the excludes file.
 
-		# Verify that the excludes file exists.
-		if [[ ! -f "${HOME}/.config/s3backup/excludes.txt" ]]; then
-			echo "Please create a file at ${HOME}/.config/s3backup/excludes.txt with the list of files / folders to exclude from backups."
-			echo "See https://restic.readthedocs.io/en/latest/040_preparing_a_backup.html#excluding-files for more information."
-			echo "If you don't want to exclude anything, just create an empty file there."
-			exit 1
-		fi
-		restic backup --exclude-file "$HOME/.config/s3backup/excludes.txt" "$HOME"
-    ;;
-	*)
-		# We got a bad command, show the help message.
-		echo "s3backup # Run an automatic backup of your home directory to S3"
-		echo "s3backup prune # clean up and check repository"
-		echo "s3backup mount # mount repository on a temp dir"
-		echo "s3backup restic {args} # run any restic command with the environment set up for you; see https://restic.readthedocs.io/en/stable/ for more information"
-		echo
-		echo "For full documentation, see https://github.com/RenovoSolutions/it-documentation/blob/master/howto/HowTo__Use_Linux_Laptop_Backup.md"
-		;;
+  # Verify that the excludes file exists.
+  if [[ ! -f "${HOME}/.config/s3backup/excludes.txt" ]]; then
+    echo "Please create a file at ${HOME}/.config/s3backup/excludes.txt with the list of files / folders to exclude from backups."
+    echo "See https://restic.readthedocs.io/en/latest/040_preparing_a_backup.html#excluding-files for more information."
+    echo "If you don't want to exclude anything, just create an empty file there."
+    exit 1
+  fi
+  restic backup --exclude-file "$HOME/.config/s3backup/excludes.txt" "$HOME"
+  ;;
+*)
+  # We got a bad command, show the help message.
+  echo "s3backup # Run an automatic backup of your home directory to S3"
+  echo "s3backup prune # clean up and check repository"
+  echo "s3backup mount # mount repository on a temp dir"
+  echo "s3backup restic {args} # run any restic command with the environment set up for you; see https://restic.readthedocs.io/en/stable/ for more information"
+  echo
+  echo "For full documentation, see https://github.com/RenovoSolutions/it-documentation/blob/master/howto/HowTo__Use_Linux_Laptop_Backup.md"
+  ;;
 esac
