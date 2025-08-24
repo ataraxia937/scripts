@@ -17,17 +17,3 @@ sudo apt -y --purge autoremove fonts-dejavu\* gnome-terminal nano
 sudo flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
 chsh -s /usr/bin/fish
-
-cd /tmp || exit
-
-# Chrome
-wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-sudo apt -y install ./google-chrome-stable_current_amd64.deb
-sudo /etc/cron.daily/google-chrome
-
-# VS Code
-wget -O vscode.deb 'https://go.microsoft.com/fwlink/?LinkID=760868'
-echo "code code/add-microsoft-repo boolean true" | sudo debconf-set-selections
-sudo apt -y install ./vscode.deb
-
-restic restore latest -t /

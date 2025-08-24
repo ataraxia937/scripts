@@ -10,19 +10,3 @@ sudo sysctl -p
 sudo dnf -y update
 
 sudo dnf -y install google-chrome-stable restic vim-default-editor
-
-sudo tee /etc/yum.repos.d/vscode.repo <<EOF
-[code]
-name=Visual Studio Code
-baseurl=https://packages.microsoft.com/yumrepos/vscode
-enabled=1
-autorefresh=1
-type=rpm-md
-gpgcheck=1
-gpgkey=https://packages.microsoft.com/keys/microsoft.asc
-EOF
-
-sudo dnf -y install code
-
-restic restore latest -t /
-
