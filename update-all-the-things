@@ -1,9 +1,9 @@
 #!/bin/sh
 
 format_output() {
-    printf "\n\033[96m==> Running %s:\033[0m\n" "$*"
-    "$@"
-    echo
+  printf "\n\033[96m==> Running %s:\033[0m\n" "$*"
+  "$@"
+  echo
 }
 
 # Should run before cargo-update
@@ -20,12 +20,10 @@ format_output dotnet tool update -g --all
 
 format_output go-global-update
 
-format_output code --update-extensions
+command -v code >/dev/null && format_output code --update-extensions
 
-# Flatpak update if Flatpak is installed
 command -v flatpak >/dev/null && format_output flatpak update -y
 
 format_output fwupdmgr update
 
-# Should be last, as it's disruptive
-format_output bash "$HOME/.local/share/blesh/ble.sh" --update
+[ "$SHELL" = "/bin/bash" ] && format_output bash "$HOME/.local/share/blesh/ble.sh" --update
