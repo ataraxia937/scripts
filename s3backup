@@ -66,7 +66,7 @@ restic)
     echo "If you don't want to exclude anything, just create an empty file there."
     exit 1
   fi
-  restic backup --exclude-file "$HOME/.config/s3backup/excludes.txt" "$HOME"
+  restic backup --exclude-file "$HOME/.config/s3backup/excludes.txt" "$HOME" --tag "$(awk -F= '/^ID=/ {print $2}' /etc/os-release)"
   ;;
 *)
   # We got a bad command, show the help message.
