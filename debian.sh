@@ -11,10 +11,12 @@ sudo sysctl -p
 sudo apt -y update
 sudo apt -y upgrade
 
-sudo apt -y install apt-file build-essential chrony curl flatpak fonts-noto gawk git needrestart-session podman ptyxis python3-pip python3-venv restic ruby ruby-dev sqlite3 vim xclip xxd
+sudo apt -y install apt-file build-essential chrony curl flatpak fonts-noto gawk git needrestart-session podman ptyxis python3-pip python3-venv restic ruby ruby-dev sqlite3 ufw vim xclip xxd
 sudo apt -y --purge autoremove fonts-dejavu\* gnome-terminal nano
 
 sudo flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+sudo ufw enable
 
 cd /tmp || exit
 
