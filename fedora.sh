@@ -9,7 +9,13 @@ sudo sysctl -p
 
 sudo dnf -y update
 
-sudo dnf -y install google-chrome-stable restic vim-default-editor
+sudo dnf -y install restic vim-default-editor
+
+sudo dnf install "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm" "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
+sudo dnf config-manager setopt fedora-cisco-openh264.enabled=1
+
+sudo dnf swap ffmpeg-free ffmpeg --allowerasing
+sudo dnf install intel-media-driver
 
 sudo tee /etc/yum.repos.d/vscode.repo <<EOF
 [code]
