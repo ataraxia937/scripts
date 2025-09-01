@@ -23,3 +23,5 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc
 EOF
 
 sudo dnf -y install code
+
+flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo
