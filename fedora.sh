@@ -1,21 +1,25 @@
 #!/bin/sh
 
+sudo hostnamectl hostname lunaria
+
 echo '%wheel ALL=(ALL) NOPASSWD:/usr/bin/dnf update' | sudo tee /etc/sudoers.d/dnf
 sudo chmod 440 /etc/sudoers.d/dnf
 sudo visudo -c
+
+sudo sed -i -e '/daemon/aAutomaticLoginEnable=True\nAutomaticLogin=ataraxia' /etc/gdm/custom.conf
 
 echo 'kernel.yama.ptrace_scope = 3' | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p
 
 sudo dnf -y update
 
-sudo dnf -y install atuin awscli2 cargo clippy fish gh golang nodejs restic rust-fmt rust-src typescript vim-default-editor yarnpkg
+sudo dnf -y install --allowerasing atuin awscli2 cargo clippy fish gh golang nodejs restic rustfmt rust-src typescript vim-default-editor yarnpkg
 
-sudo dnf install "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm" "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
+sudo dnf -y install "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm" "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
 sudo dnf config-manager setopt fedora-cisco-openh264.enabled=1
 
-sudo dnf swap ffmpeg-free ffmpeg --allowerasing
-sudo dnf install intel-media-driver
+sudo dnf -y swap --allowerasing ffmpeg-free ffmpeg
+sudo dnf -y install intel-media-driver
 
 sudo tee /etc/yum.repos.d/vscode.repo <<EOF
 [code]
