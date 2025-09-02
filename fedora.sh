@@ -9,7 +9,7 @@ sudo sysctl -p
 
 sudo dnf -y update
 
-sudo dnf -y install restic vim-default-editor
+sudo dnf -y install atuin awscli2 cargo clippy fish gh golang nodejs restic rust-fmt rust-src typescript vim-default-editor yarnpkg
 
 sudo dnf install "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm" "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
 sudo dnf config-manager setopt fedora-cisco-openh264.enabled=1
@@ -31,3 +31,5 @@ EOF
 sudo dnf -y install code
 
 flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+chsh -s /usr/bin/fish
