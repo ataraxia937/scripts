@@ -15,6 +15,7 @@ sudo firewall-cmd --remove-service=ssh
 sudo firewall-cmd --remove-service=samba-client
 sudo firewall-cmd --remove-port=1025-65535/udp
 sudo firewall-cmd --remove-port=1025-65535/tcp
+sudo firewall-cmd --add-service=mdns
 sudo firewall-cmd --set-log-denied=all
 sudo firewall-cmd --runtime-to-permanent
 
