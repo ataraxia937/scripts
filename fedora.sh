@@ -42,6 +42,8 @@ EOF
 
 sudo dnf -y install code
 
+sudo dnf -y autoremove
+
 flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
 chsh -s /usr/bin/fish
