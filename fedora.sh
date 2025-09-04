@@ -21,7 +21,7 @@ sudo firewall-cmd --runtime-to-permanent
 
 sudo dnf -y update
 
-sudo dnf -y install --allowerasing atuin awscli2 cargo clippy fish gh golang golang-honnef-tools gopls mozilla-ublock-origin nodejs restic rustfmt rust-src vim-default-editor yarnpkg
+sudo dnf -y install --allowerasing awscli2 gh mozilla-ublock-origin restic vim-default-editor
 
 sudo dnf -y install "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm" "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
 sudo dnf config-manager setopt fedora-cisco-openh264.enabled=1
@@ -29,21 +29,7 @@ sudo dnf config-manager setopt fedora-cisco-openh264.enabled=1
 sudo dnf -y swap --allowerasing ffmpeg-free ffmpeg
 sudo dnf -y install intel-media-driver
 
-sudo tee /etc/yum.repos.d/vscode.repo <<EOF
-[code]
-name=Visual Studio Code
-baseurl=https://packages.microsoft.com/yumrepos/vscode
-enabled=1
-autorefresh=1
-type=rpm-md
-gpgcheck=1
-gpgkey=https://packages.microsoft.com/keys/microsoft.asc
-EOF
-
-sudo dnf -y install code
-
 sudo dnf -y autoremove
 
 flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
-chsh -s /usr/bin/fish
