@@ -21,7 +21,7 @@ sudo firewall-cmd --runtime-to-permanent
 
 sudo dnf -y update
 
-sudo dnf -y install --allowerasing atuin awscli2 cargo clippy fish gh golang mozilla-ublock-origin nodejs restic rustfmt rust-src vim-default-editor yarnpkg
+sudo dnf -y install --allowerasing atuin awscli2 cargo clippy fish gh golang golang-honnef-tools gopls mozilla-ublock-origin nodejs restic rustfmt rust-src vim-default-editor yarnpkg
 
 sudo dnf -y install "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm" "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
 sudo dnf config-manager setopt fedora-cisco-openh264.enabled=1
