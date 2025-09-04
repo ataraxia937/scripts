@@ -65,7 +65,7 @@ TMUX
 
 cat >> /home/ataraxia/.Xdefaults <<XDEFAULTS
 XTerm*faceName:mono
-XTerm*faceSize:12
+XTerm*faceSize:14
 XTerm*saveLines:10000
 XTerm*scrollKey:true
 XTerm*scrollTtyOutput:false
@@ -82,7 +82,7 @@ mkdir -p /home/ataraxia/.config/gtk-3.0
 cat > /home/ataraxia/.config/gtk-3.0/settings.ini <<GTK
 [Settings]
 gtk-cursor-theme-name = Adwaita
-gtk-font-name = Sans 11
+gtk-font-name = Sans 13
 GTK
 
 cat > /home/ataraxia/.xsession <<XSESSION
