@@ -4,7 +4,7 @@ set -ex
 
 syspatch || true
 
-pkg_add ffmpeg firefox
+pkg_add ffmpeg firefox noto-fonts
 
 chmod 600 /usr/bin/bin/dbus-launch
 
@@ -33,12 +33,6 @@ pass out
 pass proto {icmp icmp6}
 PF
 
-cat > /etc/daily.local <<DAILY
-syspatch
-fw_update
-pkg_add -u
-DAILY
-
 cat >> /root/.profile <<ROOTPROFILE
 umask 022
 export HISTFILE="\$HOME/.ksh_history"
@@ -64,7 +58,7 @@ bind-key \` send-prefix -2
 TMUX
 
 cat >> /home/ataraxia/.Xdefaults <<XDEFAULTS
-XTerm*faceName:mono
+XTerm*faceName:Noto Sans Mono
 XTerm*faceSize:14
 XTerm*saveLines:10000
 XTerm*scrollKey:true
@@ -82,7 +76,7 @@ mkdir -p /home/ataraxia/.config/gtk-3.0
 cat > /home/ataraxia/.config/gtk-3.0/settings.ini <<GTK
 [Settings]
 gtk-cursor-theme-name = Adwaita
-gtk-font-name = Sans 13
+gtk-font-name = Noto Sans 13
 GTK
 
 cat > /home/ataraxia/.xsession <<XSESSION
