@@ -76,8 +76,13 @@ mkdir -p /home/ataraxia/.config/gtk-3.0
 cat > /home/ataraxia/.config/gtk-3.0/settings.ini <<GTK
 [Settings]
 gtk-cursor-theme-name = Adwaita
-gtk-font-name = Noto Sans 13
+# This can stay small since Firefox will be doing scaling
+gtk-font-name = Noto Sans 12
 GTK
+
+cat > /home/ataraxia/.cwmrc <<CWM
+fontname "Noto Sans:pixelsize=14"
+CWM
 
 cat > /home/ataraxia/.xsession <<XSESSION
 export LC_CTYPE="en_US.UTF-8"
