@@ -4,7 +4,7 @@ set -ex
 
 syspatch || true
 
-pkg_add ffmpeg firefox noto-fonts
+pkg_add ffmpeg firefox noto-fonts sysclean
 
 chmod 600 /usr/bin/bin/dbus-launch
 
