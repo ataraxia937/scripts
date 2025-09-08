@@ -2,8 +2,6 @@
 
 set -ex
 
-syspatch || true
-
 pkg_add chromium noto-fonts sysclean
 
 chmod 600 /usr/bin/bin/dbus-launch
