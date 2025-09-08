@@ -2,7 +2,7 @@
 
 set -ex
 
-pkg_add chromium noto-fonts sysclean
+pkg_add chromium noto-fonts noto-cjk sysclean
 
 chmod 600 /usr/local/bin/dbus-launch
 
@@ -56,7 +56,7 @@ bind-key \` send-prefix -2
 TMUX
 
 cat >> /home/ataraxia/.Xdefaults <<XDEFAULTS
-XTerm*faceName:Noto Sans Mono
+XTerm*faceName:monospace
 XTerm*faceSize:14
 XTerm*saveLines:10000
 XTerm*scrollKey:true
@@ -68,17 +68,18 @@ Xft.hinting:1
 Xft.antialias:1
 Xft.rgba:rgb
 XLock*dpmsoff:5
+*font: -misc-fixed-medium-r-normal--20-140-100-100-c-100-iso8859-1
 XDEFAULTS
 
 mkdir -p /home/ataraxia/.config/gtk-3.0
 cat > /home/ataraxia/.config/gtk-3.0/settings.ini <<GTK
 [Settings]
 gtk-cursor-theme-name = Adwaita
-gtk-font-name = Noto Sans 12
+gtk-font-name = sans 12
 GTK
 
 cat > /home/ataraxia/.cwmrc <<CWM
-fontname "Noto Sans:size=14"
+fontname "sans:size=14"
 CWM
 
 mkdir /home/ataraxia/bin
