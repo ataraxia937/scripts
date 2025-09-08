@@ -78,7 +78,7 @@ gtk-font-name = Noto Sans 14
 GTK
 
 cat > /home/ataraxia/.cwmrc <<CWM
-fontname "Noto Sans:pixelsize=14"
+fontname "Noto Sans:size=14"
 CWM
 
 cat > /home/ataraxia/.xsession <<XSESSION
