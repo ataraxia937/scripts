@@ -74,14 +74,23 @@ mkdir -p /home/ataraxia/.config/gtk-3.0
 cat > /home/ataraxia/.config/gtk-3.0/settings.ini <<GTK
 [Settings]
 gtk-cursor-theme-name = Adwaita
-gtk-font-name = Noto Sans 14
+gtk-font-name = Noto Sans 12
 GTK
 
 cat > /home/ataraxia/.cwmrc <<CWM
 fontname "Noto Sans:size=14"
 CWM
 
+mkdir /home/ataraxia/bin
+
+cat > /home/ataraxia/bin/chrome <<CHROME
+#!/bin/sh
+
+/usr/local/bin/chrome --force-device-scale-factor=1.25 "$@"
+CHROME
+
 cat > /home/ataraxia/.xsession <<XSESSION
+PATH=$HOME/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin
 export LC_CTYPE="en_US.UTF-8"
 setxkbmap -option compose:caps
 xset s off
@@ -97,4 +106,4 @@ mkdir /home/ataraxia/Downloads
 
 chown -R ataraxia:ataraxia /home/ataraxia
 chmod 755 /home/ataraxia/.xsession
-
+chmod 755 /home/ataraxia/bin/chrome
