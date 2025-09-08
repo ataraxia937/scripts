@@ -4,7 +4,7 @@ set -ex
 
 pkg_add chromium noto-fonts sysclean
 
-chmod 600 /usr/bin/bin/dbus-launch
+chmod 600 /usr/local/bin/dbus-launch
 
 rcctl enable unwind
 rcctl start unwind
