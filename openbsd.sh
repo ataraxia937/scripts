@@ -4,7 +4,7 @@ set -ex
 
 syspatch || true
 
-pkg_add ffmpeg firefox noto-fonts sysclean
+pkg_add chromium noto-fonts sysclean
 
 chmod 600 /usr/bin/bin/dbus-launch
 
@@ -76,8 +76,7 @@ mkdir -p /home/ataraxia/.config/gtk-3.0
 cat > /home/ataraxia/.config/gtk-3.0/settings.ini <<GTK
 [Settings]
 gtk-cursor-theme-name = Adwaita
-# This can stay small since Firefox will be doing scaling
-gtk-font-name = Noto Sans 12
+gtk-font-name = Noto Sans 14
 GTK
 
 cat > /home/ataraxia/.cwmrc <<CWM
@@ -90,7 +89,7 @@ setxkbmap -option compose:caps
 xset s off
 xset dpms 0 0 0
 xterm &
-firefox &
+chrome &
 exec cwm
 XSESSION
 
