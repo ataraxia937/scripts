@@ -21,12 +21,6 @@ jobs:
         run: |-
           zip -r "$HOME/${{ github.event.repository.name }}-$(date +%Y%m%dT%H%M%S).zip" .git
 
-      - name: Install AWS CLI
-        timeout-minutes: 2
-        uses: unfor19/install-aws-cli-action@v1
-        with:
-          arch: amd64
-
       - name: Upload archive to S3
         timeout-minutes: 2
         run: |-
