@@ -47,6 +47,7 @@ alias ls='ls -F'
 USERPROFILE
 
 cat > /home/ataraxia/.tmux.conf << TMUX
+​​set-option -g history-limit 10000
 set-option -g mode-keys vi
 set-option -g mouse on
 set-option -g prefix2 \`
@@ -61,6 +62,7 @@ XTerm*faceSize:14
 XTerm*saveLines:10000
 XTerm*scrollKey:true
 XTerm*scrollTtyOutput:false
+XTerm*selectToClipboard:true
 Xft.autohint:0
 Xft.lcdfilter:lcddefault
 Xft.hintstyle:hintslight
