@@ -1,3 +1,4 @@
+
 name: Backup to S3
 
 on:
@@ -15,10 +16,22 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Backup repository to S3
-        uses: ataraxia937/backup-to-s3@v1
+      - name: Archive repository
+        timeout-minutes: 2
+        run: |-
+          zip -r "$HOME/${{ github.event.repository.name }}-$(date +%Y%m%dT%H%M%S).zip" .git
+
+      - name: Install AWS CLI
+        timeout-minutes: 2
+        uses: unfor19/install-aws-cli-action@v1
         with:
-          s3-bucket: ${{ secrets.BUCKET }}
-          aws-access-key-id: ${{ secrets.ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.SECRET_KEY }}
-          aws-region: ${{ secrets.REGION }}
+          arch: amd64
+
+      - name: Upload archive to S3
+        timeout-minutes: 2
+        run: |-
+          export AWS_ACCESS_KEY_ID="${{ secrets.ACCESS_KEY }}"
+          export AWS_SECRET_ACCESS_KEY="${{ secrets.SECRET_KEY }}"
+          export AWS_REGION="${{ secrets.REGION }}"
+          export AWS_DEFAULT_REGION="$AWS_REGION"
+          aws s3 cp $HOME/${{ github.event.repository.name }}-*.zip s3://${{ secrets.BUCKET }}/${{ github.event.repository.name }}/
