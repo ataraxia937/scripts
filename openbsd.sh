@@ -57,6 +57,7 @@ bind-key \` send-prefix -2
 TMUX
 
 cat >> /home/ataraxia/.Xdefaults <<XDEFAULTS
+XTerm*allowMouseOps:true
 XTerm*faceName:monospace
 XTerm*faceSize:14
 XTerm*saveLines:10000
