@@ -16,15 +16,15 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |-
-          gh repo clone ${{ github.repository }} -- --bare
+          gh repo clone "${{ github.repository }}" -- --bare "$HOME/${{ github.event.repository.name }}"
           pwd
-          ls -la
+          ls -la "$HOME"
 
       - name: Archive repository
         timeout-minutes: 2
         run: |-
           ls -la "$HOME"
-          zip -r "$HOME/${{ github.event.repository.name }}-$(date +%Y%m%dT%H%M%S).zip" ${{ github.event.repository.name }}
+          zip -r "$HOME/${{ github.event.repository.name }}-$(date +%Y%m%dT%H%M%S).zip" "$HOME/${{ github.event.repository.name }}"
 
       - name: Upload archive to S3
         timeout-minutes: 2
