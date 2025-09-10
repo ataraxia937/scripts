@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Bare clone
         timeout-minutes: 2
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |-
           gh repo clone ${{ github.repository }} -- --bare
           pwd
@@ -26,9 +28,10 @@ jobs:
 
       - name: Upload archive to S3
         timeout-minutes: 2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_KEY }}
+          AWS_REGION: ${{ secrets.REGION }}
+          AWS_DEFAULT_REGION: ${{ secrets.REGION }}
         run: |-
-          export AWS_ACCESS_KEY_ID="${{ secrets.ACCESS_KEY }}"
-          export AWS_SECRET_ACCESS_KEY="${{ secrets.SECRET_KEY }}"
-          export AWS_REGION="${{ secrets.REGION }}"
-          export AWS_DEFAULT_REGION="$AWS_REGION"
           aws s3 cp $HOME/${{ github.event.repository.name }}-*.zip s3://${{ secrets.BUCKET }}/${{ github.event.repository.name }}/
