@@ -11,11 +11,18 @@ jobs:
   backup:
     runs-on: ubuntu-latest
     steps:
+      - name: Bare clone
+        timeout-minutes: 2
+        run: |-
+          gh repo clone ${{ github.repository }} -- --bare
+          pwd
+          ls -la
+
       - name: Archive repository
         timeout-minutes: 2
         run: |-
           ls -la "$HOME"
-          zip -r "$HOME/${{ github.event.repository.name }}-$(date +%Y%m%dT%H%M%S).zip" .git
+          zip -r "$HOME/${{ github.event.repository.name }}-$(date +%Y%m%dT%H%M%S).zip" ${{ github.event.repository.name }}
 
       - name: Upload archive to S3
         timeout-minutes: 2
