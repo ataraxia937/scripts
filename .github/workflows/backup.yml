@@ -11,14 +11,10 @@ jobs:
   backup:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
       - name: Archive repository
         timeout-minutes: 2
         run: |-
+          ls -la "$HOME"
           zip -r "$HOME/${{ github.event.repository.name }}-$(date +%Y%m%dT%H%M%S).zip" .git
 
       - name: Upload archive to S3
