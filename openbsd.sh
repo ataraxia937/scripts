@@ -104,6 +104,59 @@ chrome &
 exec cwm
 XSESSION
 
+mkdir -p /home/ataraxia/.config/alacritty
+cat > /home/ataraxia/.config/alacritty/alacritty.toml <<ALACRITTY
+[general]
+ipc_socket = false
+
+[window]
+dimensions.columns = 80
+dimensions.lines = 24
+startup_mode = "Maximized"
+resize_increments = true
+
+[font]
+size = 14
+
+[terminal]
+shell.program = "/bin/ksh"
+shell.args = ["-l"]
+
+[[hints.enabled]]
+command = "xdg-open"
+hyperlinks = true
+post_processing = true
+persist = false
+mouse.mods = "Control"
+mouse.enabled = true
+binding = { key = "O", mods = "Control|Shift" }
+regex = "(ipfs:|ipns:|magnet:|mailto:|gemini://|gopher://|https://|http://|news:|file:|git://|ssh:|ftp://)[^\u0000-\u001F\u007F-\u009F<>\"\\s{-}\\^⟨⟩`\\\\]+"
+
+[colors.primary]
+background = '#f8f8f8'
+foreground = '#2a2b33'
+
+[colors.normal]
+black   = '#000000'
+red     = '#de3d35'
+green   = '#3e953a'
+yellow  = '#d2b67b'
+blue    = '#2f5af3'
+magenta = '#a00095'
+cyan    = '#3e953a'
+white   = '#bbbbbb'
+
+[colors.bright]
+black   = '#000000'
+red     = '#de3d35'
+green   = '#3e953a'
+yellow  = '#d2b67b'
+blue    = '#2f5af3'
+magenta = '#a00095'
+cyan    = '#3e953a'
+white   = '#ffffff'
+ALACRITTY
+
 su ataraxia -c sndioctl
 
 mkdir /home/ataraxia/Downloads
