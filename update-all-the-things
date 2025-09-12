@@ -12,7 +12,10 @@ format_output rustup update
 # Should run before mise
 format_output cargo install-update -a
 
-format_output mise upgrade -v && eval "$(mise hook-env)"
+mise ls > /tmp/mise-before.txt
+format_output mise upgrade && eval "$(mise hook-env)"
+mise ls > /tmp/mise-after.txt
+diff -u /tmp/mise-before.txt /tmp/mise-after.txt
 
 format_output npm -g upgrade
 
@@ -20,10 +23,6 @@ format_output dotnet tool update -g --all
 
 format_output go-global-update
 
-command -v code >/dev/null && format_output code --update-extensions
-
 command -v flatpak >/dev/null && format_output flatpak update -y
-
-format_output fwupdmgr update
 
 [ "$SHELL" = "/bin/bash" ] && format_output bash "$HOME/.local/share/blesh/ble.sh" --update
