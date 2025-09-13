@@ -15,7 +15,7 @@ format_output cargo install-update -a
 mise ls > /tmp/mise-before.txt
 format_output mise upgrade && eval "$(mise hook-env)"
 mise ls > /tmp/mise-after.txt
-diff -u /tmp/mise-before.txt /tmp/mise-after.txt
+diff -u0 /tmp/mise-before.txt /tmp/mise-after.txt | sed '/^---/d; /^+++/d; /^@@/d'
 
 format_output npm -g upgrade
 
