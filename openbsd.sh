@@ -6,6 +6,11 @@ pkg_add chromium noto-fonts noto-cjk sysclean
 
 chmod 600 /usr/local/bin/dbus-launch
 
+cat > /etc/unwind.conf <<UNWIND
+forwarder { 2620:fe::fe port 853 authentication name "dns.quad9.net" DoT }
+preference { DoT }
+UNWIND
+
 rcctl enable unwind
 rcctl start unwind
 
