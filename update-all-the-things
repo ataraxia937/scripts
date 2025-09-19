@@ -17,7 +17,8 @@ format_output mise upgrade && eval "$(mise hook-env)"
 mise ls > /tmp/mise-after.txt
 diff -u0 /tmp/mise-before.txt /tmp/mise-after.txt | sed '/^---/d; /^+++/d; /^@@/d'
 
-format_output npm -g upgrade
+# Disable this until the supply chain attacks die down
+#format_output npm -g upgrade
 
 format_output dotnet tool update -g --all
 
