@@ -5,10 +5,10 @@ echo '%sudo ALL=(ALL) NOPASSWD:/usr/bin/apt upgrade' | sudo tee -a /etc/sudoers.
 sudo chmod 440 /etc/sudoers.d/apt
 sudo visudo -c
 
+sudo usermod -aG adm ataraxia
+
 echo 'kernel.yama.ptrace_scope = 3' | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p
-
-sudo sed -i -e '/daemon/aAutomaticLoginEnable=True\nAutomaticLogin=ataraxia' /etc/gdm3/daemon.conf
 
 sudo apt -y update
 sudo apt -y upgrade
