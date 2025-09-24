@@ -6,10 +6,8 @@ format_output() {
   echo
 }
 
-# Should run before cargo-update
 command -v rustup >/dev/null && format_output rustup update
 
-# Should run before mise
 command -v cargo-install-update >/dev/null && format_output cargo install-update -a
 
 mise ls > /tmp/mise-before.txt
@@ -17,8 +15,11 @@ format_output mise upgrade && eval "$(mise hook-env)"
 mise ls > /tmp/mise-after.txt
 diff -u0 /tmp/mise-before.txt /tmp/mise-after.txt | sed '/^---/d; /^+++/d; /^@@/d'
 
-# Disable this until the supply chain attacks die down
-#command -v npm >/dev/null && format_output npm -g upgrade
+command -v pnpm >/dev/null && format_output pnpm update -g
+
+command -v pip-review >/dev/null && format_output pip-review -a
+
+command -v gem >/dev/null && format_output gem update
 
 command -v dotnet >/dev/null && format_output dotnet tool update -g --all
 
