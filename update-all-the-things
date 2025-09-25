@@ -1,30 +1,36 @@
 #!/bin/sh
 
 format_output() {
+  command -v "$1" >/dev/null || return
+  shift
   printf "\n\033[96m==> Running %s:\033[0m\n" "$*"
   "$@"
   echo
 }
 
-command -v rustup >/dev/null && format_output rustup update
+format_output rustup rustup update
 
-command -v cargo-install-update >/dev/null && format_output cargo install-update -a
+format_output cargo-install-update cargo install-update -a
 
-mise ls > /tmp/mise-before.txt
-format_output mise upgrade && eval "$(mise hook-env)"
-mise ls > /tmp/mise-after.txt
-diff -u0 /tmp/mise-before.txt /tmp/mise-after.txt | sed '/^---/d; /^+++/d; /^@@/d'
+if command -v mise >/dev/null; then
+  mise ls > /tmp/mise-before.txt
+  format_output mise mise upgrade && eval "$(mise hook-env)"
+  mise ls > /tmp/mise-after.txt
+  diff -u0 /tmp/mise-before.txt /tmp/mise-after.txt | sed '/^---/d; /^+++/d; /^@@/d'
+fi
 
-command -v pnpm >/dev/null && format_output pnpm update -g
+format_output pnpm pnpm update -g
 
-command -v pip-review >/dev/null && format_output pip-review -a
+format_output pip-review pip-review -a
 
-command -v gem >/dev/null && format_output gem update
+format_output gem gem update
 
-command -v dotnet >/dev/null && format_output dotnet tool update -g --all
+format_output dotnet dotnet tool update -g --all
 
-command -v go-global-update >/dev/null && format_output go-global-update
+format_output go-global-update go-global-update
 
-command -v flatpak >/dev/null && format_output flatpak update -y
+format_output flatpak flatpak update -y
 
-[ "$SHELL" = "/bin/bash" ] && format_output bash "$HOME/.local/share/blesh/ble.sh" --update
+if [ "$SHELL" = "/bin/bash" ] && [ -f "$HOME/.local/share/blesh/ble.sh" ]; then
+  format_output bash bash "$HOME/.local/share/blesh/ble.sh" --update
+fi
