@@ -1,4 +1,3 @@
-#[general]
 ipc_socket = false
 
 [window]
@@ -26,25 +25,24 @@ regex = "(ipfs:|ipns:|magnet:|mailto:|gemini://|gopher://|https://|http://|news:
 
 [colors.primary]
 background = '#f8f8f8'
-foreground = '#2a2b33'
+foreground = '#2a2b32'
 
 [colors.normal]
 black   = '#000000'
-red     = '#de3d35'
-green   = '#3e953a'
-yellow  = '#d2b67b'
-blue    = '#2f5af3'
-magenta = '#a00095'
-cyan    = '#3e953a'
-white   = '#bbbbbb'
+red     = '#da3e39'
+green   = '#41933e'
+yellow  = '#855504'
+blue    = '#315eee'
+magenta = '#930092'
+cyan    = '#0e6fad'
+white   = '#8e8f96'
 
 [colors.bright]
-black   = '#000000'
-red     = '#de3d35'
-green   = '#3e953a'
-yellow  = '#d2b67b'
-blue    = '#2f5af3'
-magenta = '#a00095'
-cyan    = '#3e953a'
-white   = '#ffffff'
-
+black   = '#2a2b32'
+red     = '#da3e39'
+green   = '#41933e'
+yellow  = '#855504'
+blue    = '#315eee'
+magenta = '#930092'
+cyan    = '#0e6fad'
+white   = '#fffefe'
