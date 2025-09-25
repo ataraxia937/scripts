@@ -31,6 +31,10 @@ format_output go-global-update go-global-update
 
 format_output flatpak flatpak update -y
 
+if ! systemd-detect-virt -q && [ "$(fwupdmgr get-updates --json | jq -r '.Devices | length')" -gt 0 ]; then
+  format_output fwupdmgr fwupdmgr update
+fi
+
 if [ "$SHELL" = "/bin/bash" ] && [ -f "$HOME/.local/share/blesh/ble.sh" ]; then
   format_output bash bash "$HOME/.local/share/blesh/ble.sh" --update
 fi
