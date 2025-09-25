@@ -12,7 +12,7 @@ sudo apt -y update
 sudo apt -y upgrade
 
 sudo apt -y install apt-file build-essential chrony curl flatpak fonts-noto gawk git needrestart-session podman ptyxis sqlite3 ufw vim xclip xxd
-sudo apt -y --purge autoremove fonts-dejavu\* gnome-terminal nano
+sudo apt -y --purge autoremove cups-browsed fonts-dejavu\* gnome-terminal nano
 
 sudo flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
