@@ -21,7 +21,7 @@ fi
 
 format_output pnpm pnpm update -g
 
-format_output pip-review pip-review -a
+format_output pip-audit pip-audit --fix
 
 format_output gem gem update
 
