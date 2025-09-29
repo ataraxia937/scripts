@@ -4,6 +4,12 @@
 # Otherwise, it would pollute the current shell environment with AWS credentials and other variables,
 # including passwords.
 
+# Validate that the bucket name is set.
+if [[ -z "$RESTIC_REPOSITORY" ]] ; then
+	echo "RESTIC_REPOSITORY is not set!"
+	exit 1
+fi
+
 # This allows us to have a default profile just for this script.
 export AWS_PROFILE=backups
 
@@ -14,16 +20,12 @@ AWS_DEFAULT_REGION=$(aws configure get region)
 export AWS_DEFAULT_REGION
 
 # Get the credentials for the backup profile.
-creds=$(aws configure export-credentials --format env) || aws sso login --sso-session ataraxia937 && creds=$(aws configure export-credentials --format env)
+creds=$(aws configure export-credentials --format env) || aws sso login && creds=$(aws configure export-credentials --format env)
 eval "$creds"
 if [[ -z "$AWS_ACCESS_KEY_ID" || -z "$AWS_SECRET_ACCESS_KEY" || -z "$AWS_SESSION_TOKEN" ]]; then
   echo "Failed to get AWS credentials for profile '$AWS_PROFILE'."
   exit 1
 fi
-
-# The location of the restic repository.
-# This is a bucket in S3 that is used for backups.
-export RESTIC_REPOSITORY="s3:s3.amazonaws.com/***REMOVED***"
 
 case "$1" in
 prune)
@@ -74,7 +76,5 @@ restic)
   echo "s3backup prune # clean up and check repository"
   echo "s3backup mount # mount repository on a temp dir"
   echo "s3backup restic {args} # run any restic command with the environment set up for you; see https://restic.readthedocs.io/en/stable/ for more information"
-  echo
-  echo "For full documentation, see https://github.com/RenovoSolutions/it-documentation/blob/master/howto/HowTo__Use_Linux_Laptop_Backup.md"
   ;;
 esac
