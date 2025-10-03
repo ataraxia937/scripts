@@ -12,7 +12,8 @@ format_output rustup rustup update
 
 format_output cargo-install-update cargo install-update -a
 
-if command -v mise >/dev/null; then
+if [ -e "$HOME/.local/bin/mise" ]; then
+  format_output mise mise self-update -y
   mise ls > /tmp/mise-before.txt
   format_output mise mise upgrade && eval "$(mise hook-env)"
   mise ls > /tmp/mise-after.txt
