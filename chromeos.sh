@@ -3,7 +3,7 @@
 sudo apt -y update
 sudo apt -y upgrade
 
-sudo apt -y install apt-file build-essential curl flatpak gawk git gnome-keyring podman sqlite3 vim xxd
+sudo apt -y install apt-file build-essential curl flatpak gawk git podman sqlite3 vim xxd
 sudo apt -y --purge autoremove cups-browsed nano
 
 sudo flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo
