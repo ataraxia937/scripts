@@ -24,7 +24,7 @@ format_output pnpm pnpm update -g
 
 format_output pip-audit pip-audit --fix
 
-format_output gem gem update
+format_output gem gem update && gem cleanup
 
 format_output dotnet dotnet tool update -g --all
 
