@@ -1,14 +1,15 @@
 #!/bin/sh
 
-sudo apt -y update
-sudo apt -y upgrade
+sudo sed -i -e 's/bookworm/trixie/' /etc/apt/sources.list
 
-sudo apt -y install apt-file build-essential curl flatpak gawk git podman sqlite3 vim-tiny
-sudo apt -y --purge autoremove cups-browsed nano
+sudo apt -y update
+sudo apt -y full-upgrade
+sudo apt -y --purge autoremove
+
+sudo apt -y install apt-file build-essential flatpak jq rsync
 
 sudo flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
-sudo usermod --add-subuids 100000-165535 --add-subgids 100000-165535 ataraxia
-podman system migrate
-
-sudo usermod -aG adm ataraxia
+curl https://mise.run | sh
+echo "eval \"\$(/home/ataraxia/.local/bin/mise activate bash)\"" >> ~/.bashrc
+eval "$(/home/ataraxia/.local/bin/mise activate bash)"
