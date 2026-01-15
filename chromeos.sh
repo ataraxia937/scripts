@@ -6,7 +6,7 @@ sudo apt -y update
 sudo apt -y full-upgrade
 sudo apt -y --purge autoremove
 
-sudo apt -y install apt-file build-essential flatpak jq rsync
+sudo apt -y install alacritty apt-file build-essential flatpak jq rsync
 
 sudo flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
@@ -18,3 +18,6 @@ curl -Lo /tmp/font.zip https://github.com/ryanoasis/nerd-fonts/releases/download
 mkdir $HOME/.local/share/fonts
 unzip -d $HOME/.local/share/fonts/ /tmp/font.zip SymbolsNerdFontMono-Regular.ttf
 fc-cache
+
+mkdir $HOME/.config/alacritty
+curl -Lo $HOME/.config/alacritty/alacritty.toml https://codeberg.org/ataraxia937/scripts/raw/branch/main/configs/alacritty.toml
