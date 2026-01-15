@@ -3,15 +3,15 @@ ipc_socket = false
 [window]
 dimensions.columns = 80
 dimensions.lines = 24
-#startup_mode = "Maximized"
+startup_mode = "Maximized"
 resize_increments = true
 
 [scrolling]
-history = 0
+history = 10000
 
 [font]
-normal.family = "UbuntuSansMono Nerd Font"
-size = 15
+normal.family = "Cousine"
+size = 12
 
 [[hints.enabled]]
 command = "xdg-open"
