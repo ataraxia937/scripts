@@ -6,7 +6,7 @@ sudo apt -y update
 sudo apt -y full-upgrade
 sudo apt -y --purge autoremove
 
-sudo apt -y install alacritty apt-file build-essential flatpak jq rsync
+sudo apt -y install apt-file build-essential flatpak jq rsync
 
 sudo flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
@@ -17,6 +17,3 @@ eval "$(/home/ataraxia/.local/bin/mise activate bash)"
 mkdir $HOME/.config/mise
 curl -Lo $HOME/.config/mise/config.toml https://codeberg.org/ataraxia937/scripts/raw/branch/main/configs/mise_config.toml
 mise -C $HOME install
-
-mkdir $HOME/.config/alacritty
-curl -Lo $HOME/.config/alacritty/alacritty.toml https://codeberg.org/ataraxia937/scripts/raw/branch/main/configs/alacritty.toml
