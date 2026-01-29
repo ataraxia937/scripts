@@ -10,7 +10,7 @@ sed -i -e '/^#shopt -s globstar$/s/^#//' \
   -e '/^#force_color_prompt=yes$/s/^#//' \
   -e '/^#\[ -x \/usr\/bin\/lesspipe \] && eval "\$(SHELL=\/bin\/sh lesspipe)"$/s/^#//' $HOME/.bashrc
 
-sudo apt -y install apt-file build-essential dc fd-find flatpak jq ncdu ripgrep rsync unzip
+sudo apt -y install apt-file build-essential dc fd-find flatpak git jq ncdu ripgrep rsync unzip
 
 sudo flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
