@@ -22,3 +22,7 @@ curl -Lo /tmp/font.zip
 mkdir -p $HOME/.local/share/fonts
 unzip -d $HOME/.local/share/fonts /tmp/font.zip
 fc-cache
+
+sudo gpasswd -a ataraxia937 render
+mkdir -p $HOME/.config/kitty
+curl -Lo $HOME/.config/kitty/kitty.conf https://codeberg.org/ataraxia937/scripts/raw/branch/main/configs/kitty.conf
