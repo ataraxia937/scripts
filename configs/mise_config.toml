@@ -4,8 +4,6 @@ node = "lts"
 python = "latest"
 usage = "latest"
 uv = "latest"
-ripgrep = "latest"
-fd = "latest"
 
 [settings]
 experimental = true
