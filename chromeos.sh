@@ -6,7 +6,7 @@ sudo apt -y update
 sudo apt -y full-upgrade
 sudo apt -y --purge autoremove
 
-sudo apt -y install apt-file build-essential dc flatpak jq ncdu rsync
+sudo apt -y install apt-file build-essential dc fd-find flatpak jq ncdu ripgrep rsync
 
 sudo flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
