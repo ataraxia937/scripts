@@ -17,8 +17,8 @@ sudo flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 echo "export npm_config_ignore_scripts=true" >> ~/.bashrc
 
 curl https://mise.run | sh
-echo "eval \"\$(/home/ataraxia/.local/bin/mise activate bash)\"" >> ~/.bashrc
-eval "$(/home/ataraxia/.local/bin/mise activate bash)"
+echo "eval \"\$(/home/ataraxia937/.local/bin/mise activate bash)\"" >> ~/.bashrc
+eval "$(/home/ataraxia937/.local/bin/mise activate bash)"
 
 mkdir ~/.config/mise
 curl -Lo ~/.config/mise/config.toml https://codeberg.org/ataraxia937/scripts/raw/branch/main/configs/mise_config.toml
