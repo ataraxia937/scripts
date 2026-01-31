@@ -11,6 +11,3 @@ filetype plugin indent on " Enable filetype-specific indenting
 set wrap
 
 set background=light
-let g:one_allow_italics = 1
-colorscheme one
-set termguicolors
