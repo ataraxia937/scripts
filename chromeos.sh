@@ -19,6 +19,8 @@ echo "eval \"\$($HOME/.local/bin/mise activate bash)\"" >> ~/.bashrc
 
 . ~/.bashrc
 
+curl -Lo ~/.vimrc https://codeberg.org/ataraxia937/scripts/raw/branch/main/configs/vimrc
+
 mkdir ~/.config/mise
 curl -Lo ~/.config/mise/config.toml https://codeberg.org/ataraxia937/scripts/raw/branch/main/configs/mise_config.toml
 mise install
