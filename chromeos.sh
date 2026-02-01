@@ -8,7 +8,7 @@ sed -i -e '/^#shopt -s globstar$/s/^#//' \
   -e '/^#force_color_prompt=yes$/s/^#//' \
   -e '/^#\[ -x \/usr\/bin\/lesspipe \] && eval "\$(SHELL=\/bin\/sh lesspipe)"$/s/^#//' ~/.bashrc
 
-sudo apt -y install apt-file build-essential dc fd-find flatpak git jq ncdu ripgrep rsync unzip
+sudo apt -y install apt-file build-essential dc fd-find flatpak git jq man ncdu podman ripgrep rsync unzip
 
 sudo flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
@@ -18,6 +18,9 @@ curl https://mise.run | sh
 echo "eval \"\$($HOME/.local/bin/mise activate bash)\"" >> ~/.bashrc
 
 . ~/.bashrc
+
+mkdir -p ~/.config/containers
+echo 'unqualified-search-registries = ["docker.io", "quay.io"]' > ~/.config/containers/registries.conf
 
 curl -Lo ~/.vimrc https://codeberg.org/ataraxia937/scripts/raw/branch/main/configs/vimrc
 
