@@ -43,6 +43,8 @@ function morning-ritual {
 
     [[ -f $HOME/.emacs.d/bin/doom ]] && format_output doom upgrade && format_output doom env
     [[ -f $HOME/.local/bin/claude ]] && format_output claude update
+
+    return 0
   )
 
   if [[ $? -ne 0 ]]; then
