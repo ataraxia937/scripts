@@ -14,7 +14,46 @@ export npm_config_ignore_scripts=true
 
 eval "$($HOME/.local/bin/mise activate bash)"
 
+function format_output {
+  printf "\n\033[96m==> Running %s:\033[0m\n" "$*"
+  "$@"
+  echo
+}
+
+function morning-ritual {
+  (
+    set -e
+    sudo -v
+
+    format_output sudo apt update
+    format_output sudo apt upgrade --allow-downgrades -y
+    format_output sudo apt dist-upgrade --allow-downgrades -y
+    format_output sudo flatpak update -y
+    format_output sudo flatpak uninstall --unused -y
+    format_output sudo apt autoremove -y --purge
+
+    format_output mise self-update -y
+    format_output mise plugins upgrade -y
+    format_output mise upgrade -y
+    eval "$(mise hook-env)"
+    if [[ -f $HOME/.local/state/mise/python_updated ]]; then
+      format_output mise install -f -C "$HOME" 'pipx:*'
+      rm -f "$HOME/.local/state/mise/python_updated"
+    fi
+
+    [[ -f $HOME/.emacs.d/bin/doom ]] && format_output doom upgrade && format_output doom env
+    [[ -f $HOME/.local/bin/claude ]] && format_output claude update
+  )
+
+  if [[ $? -ne 0 ]]; then
+    echo -e "\033[91mmorning-ritual encountered errors.\033[0m"
+    return 1
+  fi
+}
+EOF
+
 sudo apt -y install apt-file build-essential dc fd-find flatpak git jq man ncdu podman ripgrep rsync unzip
+sudo apt -y install libbz2-dev libffi-dev libgdbm-compat-dev libgdbm-dev liblzma-dev libncurses-dev libreadline-dev libsqlite3-dev libssl-dev libzstd-dev pkg-config tk-dev uuid-dev zlib1g-dev
 
 sudo flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
