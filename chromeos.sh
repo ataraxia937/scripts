@@ -4,8 +4,8 @@ sudo apt -y update
 sudo apt -y full-upgrade
 sudo apt -y --purge autoremove
 
-sudo apt -y install apt-file build-essential dc flatpak git jq man ncdu podman rsync unzip
-sudo apt -y install libbz2-dev libffi-dev libgdbm-compat-dev libgdbm-dev liblzma-dev libncurses-dev libreadline-dev libsqlite3-dev libssl-dev libzstd-dev pkg-config tk-dev uuid-dev zlib1g-dev
+sudo apt -y install apt-file build-essential dc flatpak git man ncdu podman rsync unzip
+sudo apt -y install libbz2-dev libffi-dev libgdbm-compat-dev libgdbm-dev liblzma-dev libncurses-dev libreadline-dev libsqlite3-dev libssl-dev libzstd-dev pkg-config tk-dev uuid-dev zlib1g-dev # Python build deps
 
 sed -i -e '/^#shopt -s globstar$/s/^#//' \
   -e '/^#force_color_prompt=yes$/s/^#//' \
@@ -87,6 +87,7 @@ usage = "latest"
 uv = "latest"
 fd = "latest"
 ripgrep = "latest"
+jq = "latest"
 
 [settings]
 experimental = true
