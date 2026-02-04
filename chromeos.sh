@@ -4,6 +4,9 @@ sudo apt -y update
 sudo apt -y full-upgrade
 sudo apt -y --purge autoremove
 
+sudo apt -y install apt-file build-essential dc flatpak git jq man ncdu podman rsync unzip
+sudo apt -y install libbz2-dev libffi-dev libgdbm-compat-dev libgdbm-dev liblzma-dev libncurses-dev libreadline-dev libsqlite3-dev libssl-dev libzstd-dev pkg-config tk-dev uuid-dev zlib1g-dev
+
 sed -i -e '/^#shopt -s globstar$/s/^#//' \
   -e '/^#force_color_prompt=yes$/s/^#//' \
   -e '/^#\[ -x \/usr\/bin\/lesspipe \] && eval "\$(SHELL=\/bin\/sh lesspipe)"$/s/^#//' ~/.bashrc
@@ -36,10 +39,6 @@ function morning-ritual {
     format_output mise plugins upgrade -y
     format_output mise upgrade -y
     eval "$(mise hook-env)"
-    if [[ -f $HOME/.local/state/mise/python_updated ]]; then
-      format_output mise install -f -C "$HOME" 'pipx:*'
-      rm -f "$HOME/.local/state/mise/python_updated"
-    fi
 
     [[ -f $HOME/.emacs.d/bin/doom ]] && format_output doom upgrade && format_output doom env
     [[ -f $HOME/.local/bin/claude ]] && format_output claude update
@@ -53,9 +52,6 @@ function morning-ritual {
   fi
 }
 EOF
-
-sudo apt -y install apt-file build-essential dc flatpak git jq man ncdu podman rsync unzip
-sudo apt -y install libbz2-dev libffi-dev libgdbm-compat-dev libgdbm-dev liblzma-dev libncurses-dev libreadline-dev libsqlite3-dev libssl-dev libzstd-dev pkg-config tk-dev uuid-dev zlib1g-dev
 
 sudo flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
@@ -86,7 +82,7 @@ mkdir ~/.config/mise
 cat > ~/.config/mise/config.toml <<'EOF'
 [tools]
 node = "lts"
-python = { version = "latest", postinstall = "touch ~/.local/state/mise/python_updated" }
+python = "latest"
 usage = "latest"
 uv = "latest"
 fd = "latest"
@@ -94,6 +90,9 @@ ripgrep = "latest"
 
 [settings]
 experimental = true
+
+[settings.python]
+compile = true
 EOF
 mise install
 
