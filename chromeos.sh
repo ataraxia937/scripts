@@ -86,7 +86,7 @@ mkdir ~/.config/mise
 cat > ~/.config/mise/config.toml <<'EOF'
 [tools]
 node = "lts"
-python = "latest"
+python = { version = "latest", postinstall = "touch ~/.local/state/mise/python_updated" }
 usage = "latest"
 uv = "latest"
 fd = "latest"
