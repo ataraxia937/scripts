@@ -54,7 +54,7 @@ function morning-ritual {
 }
 EOF
 
-sudo apt -y install apt-file build-essential dc fd-find flatpak git jq man ncdu podman ripgrep rsync unzip
+sudo apt -y install apt-file build-essential dc flatpak git jq man ncdu podman rsync unzip
 sudo apt -y install libbz2-dev libffi-dev libgdbm-compat-dev libgdbm-dev liblzma-dev libncurses-dev libreadline-dev libsqlite3-dev libssl-dev libzstd-dev pkg-config tk-dev uuid-dev zlib1g-dev
 
 sudo flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo
@@ -89,6 +89,8 @@ node = "lts"
 python = "latest"
 usage = "latest"
 uv = "latest"
+fd = "latest"
+ripgrep = "latest"
 
 [settings]
 experimental = true
