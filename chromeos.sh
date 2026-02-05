@@ -84,7 +84,7 @@ eval "$(starship completions bash)"
 #eval "$(gh completion -s bash)"
 #eval "$(tailscale completion bash)"
 eval "$(npm completion)"
-#eval "$(kitty + complete setup bash)"
+eval "$(kitty + complete setup bash)"
 #eval "$(sqlcmd completion bash)"
 eval "$(uv generate-shell-completion bash)"
 
@@ -215,7 +215,7 @@ sudo gpasswd -a ataraxia937 render
 mkdir -p ~/.config/kitty
 cat > ~/.config/kitty/kitty.conf <<'EOF'
 symbol_map U+23FB-U+23FE,U+2665,U+26A1,U+2B58,U+E000-U+E00A,U+E0A0-U+E0A3,U+E0B0-U+E0C8,U+E0CA,U+E0CC-U+E0D7,U+E200-U+E2A9,U+E300-U+E3E3,U+E5FA-U+E6B8,U+E700-U+E7C5,U+EA60-U+EC1E,U+F000-U+F2FF,U+F300-U+F372,U+F400-U+F533,U+F0001-U+F1AF0 Symbols Nerd Font
-font_size 12.0
+font_size 11.0
 modify_font cell_height -2px
 text_composition_strategy 1.5
 scrollback_lines 2000
