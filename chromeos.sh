@@ -11,11 +11,76 @@ sed -i -e '/^#shopt -s globstar$/s/^#//' \
   -e '/^#force_color_prompt=yes$/s/^#//' \
   -e '/^#\[ -x \/usr\/bin\/lesspipe \] && eval "\$(SHELL=\/bin\/sh lesspipe)"$/s/^#//' ~/.bashrc
 
-cat >> ~/.bashrc << 'EOF'
+cat > ~/.bashrc << 'EOF'
+#!/bin/bash
 
+umask 0077
+
+# If not running interactively, don't do anything
+case $- in
+  *i*) ;;
+  *) return ;;
+esac
+
+# don't put duplicate lines or lines starting with space in the history.
+export HISTCONTROL=ignoreboth
+export HISTIGNORE="*AWS_ACCESS_KEY*:*AWS_SECRET*:*ASSWORD*:*assword*:*OKEN*:*oken*"
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+export HISTSIZE=-1
+export HISTFILESIZE=-1
+export HISTTIMEFORMAT="[%F %T] "
+export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+shopt -s globstar
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# enable programmable completion features
+source /usr/share/bash-completion/bash_completion
+
+export EDITOR=vim
+command -v nvim >/dev/null 2>&1 && export EDITOR=nvim
+export VISUAL="$EDITOR"
+export GOPATH=$HOME/.local/share/go
+export GOBIN=$HOME/.local/bin
+export NODE_NO_WARNINGS=1
 export npm_config_ignore_scripts=true
+export npm_config_loglevel=error
 
-eval "$($HOME/.local/bin/mise activate bash)"
+# shellcheck disable=SC2076
+if [ -d "$HOME/.npm/bin" ] && [[ ! ":$PATH:" =~ ":$HOME/.npm/bin:" ]]; then
+  export PATH="$HOME/.npm/bin:$PATH"
+fi
+
+# shellcheck disable=SC2076
+if [ -d "$HOME/.emacs.d/bin" ] && [[ ! ":$PATH:" =~ ":$HOME/.emacs.d/bin:" ]]; then
+  export PATH="$HOME/.emacs.d/bin:$PATH"
+fi
+
+eval "$(~/.local/bin/mise activate bash)"
+
+eval "$(dircolors -b)"
+
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -i'
+alias uv-recreate='rm -rf .venv && uv venv && find . -name "requirements.txt" -not -path "./node_modules/*" -not -path "./.venv/*" -exec uv pip install -r {} \;'
+alias venv-activate='source .venv/bin/activate'
+alias fd='fd -H'
+[[ $TERM = 'xterm-kitty' ]] && alias rg='rg --hyperlink-format=kitty'
 
 function format_output {
   printf "\n\033[96m==> Running %s:\033[0m\n" "$*"
@@ -26,7 +91,6 @@ function format_output {
 function morning-ritual {
   (
     set -e
-    sudo -v
 
     format_output sudo apt update
     format_output sudo apt upgrade --allow-downgrades -y
@@ -39,6 +103,7 @@ function morning-ritual {
     format_output mise plugins upgrade -y
     format_output mise upgrade -y
     eval "$(mise hook-env)"
+    mise prune -y
 
     [[ -f $HOME/.emacs.d/bin/doom ]] && format_output doom upgrade && format_output doom env
     [[ -f $HOME/.local/bin/claude ]] && format_output claude update
@@ -51,6 +116,13 @@ function morning-ritual {
     return 1
   fi
 }
+
+function get_my_ip {
+  curl -w "\n" -4 https://ifconfig.me
+}
+
+eval "$(fzf --bash)"
+
 EOF
 
 sudo flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo
@@ -88,6 +160,7 @@ uv = "latest"
 fd = "latest"
 ripgrep = "latest"
 jq = "latest"
+fzf = "latest"
 
 [settings]
 experimental = true
