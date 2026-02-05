@@ -70,7 +70,10 @@ eval "$(~/.local/bin/mise activate bash)"
 source /usr/share/bash-completion/bash_completion
 # shellcheck source=/dev/null
 source "$(mise where fd)"/*/autocomplete/fd.bash
+#complete -C aws_completer aws
 #complete -C gocomplete go
+#complete -C vault vault
+#complete -C terraform terraform
 #eval "$(rustup completions bash rustup)"
 #eval "$(rustup completions bash cargo)"
 eval "$(mise completion bash --include-bash-completion-lib)"
@@ -80,6 +83,9 @@ eval "$(starship completions bash)"
 #eval "$(gh completion -s bash)"
 #eval "$(tailscale completion bash)"
 eval "$(npm completion)"
+#eval "$(kitty + complete setup bash)"
+#eval "$(sqlcmd completion bash)"
+eval "$(uv generate-shell-completion bash)"
 
 eval "$(dircolors -b)"
 
