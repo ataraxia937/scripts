@@ -8,7 +8,7 @@ sudo apt -y full-upgrade
 sudo apt -y --purge autoremove
 
 # INSTALL DEBS
-sudo apt -y install apt-file build-essential dc flatpak git man ncdu podman rsync unzip
+sudo apt -y install apt-file build-essential dc flatpak git kitty libegl1 man-db ncdu podman rsync unzip
 sudo apt -y install libbz2-dev libffi-dev libgdbm-compat-dev libgdbm-dev liblzma-dev libncurses-dev libreadline-dev libsqlite3-dev libssl-dev libzstd-dev pkg-config tk-dev uuid-dev zlib1g-dev # Python build deps
 
 # CREATE BASHRC
@@ -186,7 +186,6 @@ ripgrep = "latest"
 jq = "latest"
 fzf = "latest"
 starship = "latest"
-"github:kovidgoyal/kitty" = { version = "latest", asset_pattern = "kitty-*-x86_64.txz" }
 
 [settings]
 experimental = true
@@ -200,14 +199,14 @@ mise install
 # INSTALL NERD FONT
 NERD_URL=$(curl -s https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest | grep '"browser_download_url".*NerdFontsSymbolsOnly.zip' | cut -d '"' -f 4)
 curl -L -o /tmp/nerd.zip "$NERD_URL"
-unzip -j /tmp/nerd.zip '*.ttf' -d ~/.local/share/fonts
+unzip -jo /tmp/nerd.zip '*.ttf' -d ~/.local/share/fonts
 fc-cache
 rm -f /tmp/nerd.zip
 
 # INSTALL MONASPACE FONT
 MONASPACE_URL=$(curl -s https://api.github.com/repos/githubnext/monaspace/releases/latest | grep '"browser_download_url".*monaspace-variable.*\.zip' | cut -d '"' -f 4)
 curl -L -o /tmp/monaspace.zip "$MONASPACE_URL"
-unzip -j /tmp/monaspace.zip -d ~/.local/share/fonts
+unzip -jo /tmp/monaspace.zip -d ~/.local/share/fonts
 fc-cache
 rm -f /tmp/monaspace.zip
 
