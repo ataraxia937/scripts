@@ -13,6 +13,7 @@ sed -i -e '/^#shopt -s globstar$/s/^#//' \
 
 cat > ~/.bashrc << 'EOF'
 #!/bin/bash
+# shellcheck disable=SC1090,SC1091
 
 umask 0077
 
@@ -44,9 +45,6 @@ shopt -s globstar
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-# enable programmable completion features
-source /usr/share/bash-completion/bash_completion
-
 export EDITOR=vim
 command -v nvim >/dev/null 2>&1 && export EDITOR=nvim
 export VISUAL="$EDITOR"
@@ -67,6 +65,21 @@ if [ -d "$HOME/.emacs.d/bin" ] && [[ ! ":$PATH:" =~ ":$HOME/.emacs.d/bin:" ]]; t
 fi
 
 eval "$(~/.local/bin/mise activate bash)"
+
+# enable programmable completion features
+source /usr/share/bash-completion/bash_completion
+# shellcheck source=/dev/null
+source "$(mise where fd)"/*/autocomplete/fd.bash
+#complete -C gocomplete go
+#eval "$(rustup completions bash rustup)"
+#eval "$(rustup completions bash cargo)"
+eval "$(mise completion bash --include-bash-completion-lib)"
+#eval "$(restic generate --bash-completion -)"
+eval "$(rg --generate complete-bash)"
+eval "$(starship completions bash)"
+#eval "$(gh completion -s bash)"
+#eval "$(tailscale completion bash)"
+eval "$(npm completion)"
 
 eval "$(dircolors -b)"
 
@@ -89,7 +102,7 @@ function format_output {
 }
 
 function morning-ritual {
-  (
+  if ! (
     set -e
 
     format_output sudo apt update
@@ -109,9 +122,7 @@ function morning-ritual {
     [[ -f $HOME/.local/bin/claude ]] && format_output claude update
 
     return 0
-  )
-
-  if [[ $? -ne 0 ]]; then
+  ); then
     echo -e "\033[91mmorning-ritual encountered errors.\033[0m"
     return 1
   fi
@@ -122,6 +133,8 @@ function get_my_ip {
 }
 
 eval "$(fzf --bash)"
+
+eval "$(starship init bash)"
 
 EOF
 
@@ -161,6 +174,7 @@ fd = "latest"
 ripgrep = "latest"
 jq = "latest"
 fzf = "latest"
+starship = "latest"
 
 [settings]
 experimental = true
