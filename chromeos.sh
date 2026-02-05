@@ -1,16 +1,17 @@
 #!/bin/sh
 
+cd
+
+# UPGRADE
 sudo apt -y update
 sudo apt -y full-upgrade
 sudo apt -y --purge autoremove
 
+# INSTALL DEBS
 sudo apt -y install apt-file build-essential dc flatpak git man ncdu podman rsync unzip
 sudo apt -y install libbz2-dev libffi-dev libgdbm-compat-dev libgdbm-dev liblzma-dev libncurses-dev libreadline-dev libsqlite3-dev libssl-dev libzstd-dev pkg-config tk-dev uuid-dev zlib1g-dev # Python build deps
 
-sed -i -e '/^#shopt -s globstar$/s/^#//' \
-  -e '/^#force_color_prompt=yes$/s/^#//' \
-  -e '/^#\[ -x \/usr\/bin\/lesspipe \] && eval "\$(SHELL=\/bin\/sh lesspipe)"$/s/^#//' ~/.bashrc
-
+# CREATE BASHRC
 cat > ~/.bashrc << 'EOF'
 #!/bin/bash
 # shellcheck disable=SC1090,SC1091
@@ -144,15 +145,17 @@ eval "$(starship init bash)"
 
 EOF
 
-sudo flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+# FLATPAK
+sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
+# INSTALL MISE
 curl https://mise.run | sh
 
-. ~/.bashrc
-
+# CONFIGURE PODMAN
 mkdir -p ~/.config/containers
 echo 'unqualified-search-registries = ["docker.io", "quay.io"]' > ~/.config/containers/registries.conf
 
+# CONFIGURE VIM
 cat > ~/.vimrc <<'EOF'
 unlet! skip_defaults_vim
 source $VIMRUNTIME/defaults.vim
@@ -167,8 +170,10 @@ filetype plugin indent on " Enable filetype-specific indenting
 set wrap
 
 set background=light
+
 EOF
 
+# INSTALL MISE TOOLS
 mkdir ~/.config/mise
 cat > ~/.config/mise/config.toml <<'EOF'
 [tools]
@@ -181,27 +186,38 @@ ripgrep = "latest"
 jq = "latest"
 fzf = "latest"
 starship = "latest"
+"github:kovidgoyal/kitty" = { version = "latest", asset_pattern = "kitty-*-x86_64.txz" }
 
 [settings]
 experimental = true
 
 [settings.python]
 compile = true
+
 EOF
 mise install
 
-curl -Lo /tmp/nerdfont.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/NerdFontsSymbolsOnly.zip
-mkdir -p ~/.local/share/fonts
-unzip -d ~/.local/share/fonts -j /tmp/nerdfont.zip '.ttf'
+# INSTALL NERD FONT
+NERD_URL=$(curl -s https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest | grep '"browser_download_url".*NerdFontsSymbolsOnly.zip' | cut -d '"' -f 4)
+curl -L -o /tmp/nerd.zip "$NERD_URL"
+unzip -j /tmp/nerd.zip '*.ttf' -d ~/.local/share/fonts
 fc-cache
-rm -f /tmp/nerdfont.zip
+rm -f /tmp/nerd.zip
 
+# INSTALL MONASPACE FONT
+MONASPACE_URL=$(curl -s https://api.github.com/repos/githubnext/monaspace/releases/latest | grep '"browser_download_url".*monaspace-variable.*\.zip' | cut -d '"' -f 4)
+curl -L -o /tmp/monaspace.zip "$MONASPACE_URL"
+unzip -j /tmp/monaspace.zip -d ~/.local/share/fonts
+fc-cache
+rm -f /tmp/monaspace.zip
+
+# CONFIGURE KITTY
 sudo gpasswd -a ataraxia937 render
 mkdir -p ~/.config/kitty
 cat > ~/.config/kitty/kitty.conf <<'EOF'
-font_family Cousine
 symbol_map U+23FB-U+23FE,U+2665,U+26A1,U+2B58,U+E000-U+E00A,U+E0A0-U+E0A3,U+E0B0-U+E0C8,U+E0CA,U+E0CC-U+E0D7,U+E200-U+E2A9,U+E300-U+E3E3,U+E5FA-U+E6B8,U+E700-U+E7C5,U+EA60-U+EC1E,U+F000-U+F2FF,U+F300-U+F372,U+F400-U+F533,U+F0001-U+F1AF0 Symbols Nerd Font
 font_size 12.0
+modify_font cell_height -1px
 text_composition_strategy 1.5
 scrollback_lines 2000
 scrollback_pager_history_size 4096
@@ -248,4 +264,12 @@ color12 #315EEE
 color13 #930092
 color14 #0E6FAD
 color15 #FFFEFE
+
+# BEGIN_KITTY_FONTS
+font_family      family='Monaspace Neon Var' style=Regular variable_name=MonaspaceNeonVarExtraLight features='+calt +liga'
+bold_font        auto
+italic_font      auto
+bold_italic_font auto
+# END_KITTY_FONTS
+
 EOF
