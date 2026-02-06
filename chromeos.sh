@@ -145,6 +145,10 @@ eval "$(starship init bash)"
 
 EOF
 
+# PROTECT BASH HISTORY
+touch ~/.bash_history
+sudo chattr +a ~/.bash_history
+
 # FLATPAK
 sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
@@ -195,6 +199,7 @@ compile = true
 
 EOF
 mise install
+mise install # twice to handle tool dependencies
 
 # INSTALL NERD FONT
 NERD_URL=$(curl -sf https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest | grep '"browser_download_url".*NerdFontsSymbolsOnly.zip' | cut -d '"' -f 4)
