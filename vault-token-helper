@@ -1,0 +1,66 @@
+#!/bin/bash
+set -eu
+
+# Copyright 2020 Ville Skyttä
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# Specification: https://www.hashicorp.com/blog/building-a-vault-token-helper/
+
+if [[ -n "$VAULT_ADDR" ]]; then
+	vault_id="$VAULT_ADDR"
+else
+	vault_id="default"
+fi
+
+attribute_values="vault $vault_id"
+label="Vault $vault_id token"
+
+store() {
+	read -r token || :
+	if test -z "$token"; then
+		erase
+		return
+	fi
+	# Assumes builtin printf; otherwise token observable from process list
+	# shellcheck disable=SC2086
+	printf "%s" "$token" |
+		secret-tool store --label="$label" $attribute_values
+}
+
+erase() {
+	# shellcheck disable=SC2086
+	secret-tool clear $attribute_values
+}
+
+get() {
+	set +e
+	# shellcheck disable=SC2086
+	token=$(secret-tool lookup $attribute_values)
+	rc=$?
+	test $rc -eq 1 -a -z "$token" && return 0
+	printf %s "$token"
+	return $rc
+}
+
+case ${1-} in
+store | erase | get)
+	$1
+	;;
+*)
+	printf "usage: %s {store | erase | get}\n" "$0" >&2
+	exit 2
+	;;
+esac
