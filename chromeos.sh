@@ -3,13 +3,13 @@
 cd || exit
 
 # UPGRADE
-sudo apt -y update
-sudo apt -y full-upgrade
-sudo apt -y --purge autoremove
+sudo apt -qq update
+sudo apt -qq full-upgrade
+sudo apt -qq --purge autoremove
 
 # INSTALL DEBS
-sudo apt -y install apt-file build-essential dc flatpak git kitty libegl1 man-db ncdu podman rsync unzip
-sudo apt -y install libbz2-dev libffi-dev libgdbm-compat-dev libgdbm-dev liblzma-dev libncurses-dev libreadline-dev libsqlite3-dev libssl-dev libzstd-dev pkg-config tk-dev uuid-dev zlib1g-dev # Python build deps
+sudo apt -qq install apt-file build-essential dc flatpak git kitty libegl1 man-db ncdu podman rsync unzip
+sudo apt -qq install libbz2-dev libffi-dev libgdbm-compat-dev libgdbm-dev liblzma-dev libncurses-dev libreadline-dev libsqlite3-dev libssl-dev libzstd-dev pkg-config tk-dev uuid-dev zlib1g-dev # Python build deps
 
 # CREATE BASHRC
 cat > ~/.bashrc << 'EOF'
@@ -149,7 +149,7 @@ EOF
 sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
 # INSTALL MISE
-curl https://mise.run | MISE_QUIET=1 sh
+curl -sfL https://mise.run | MISE_QUIET=1 sh
 
 # CONFIGURE PODMAN
 mkdir -p ~/.config/containers
@@ -197,16 +197,16 @@ EOF
 mise install
 
 # INSTALL NERD FONT
-NERD_URL=$(curl -s https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest | grep '"browser_download_url".*NerdFontsSymbolsOnly.zip' | cut -d '"' -f 4)
-curl -L -o /tmp/nerd.zip "$NERD_URL"
-unzip -jo /tmp/nerd.zip '*.ttf' -d ~/.local/share/fonts
+NERD_URL=$(curl -sf https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest | grep '"browser_download_url".*NerdFontsSymbolsOnly.zip' | cut -d '"' -f 4)
+curl -sfL -o /tmp/nerd.zip "$NERD_URL"
+unzip -qjo /tmp/nerd.zip '*.ttf' -d ~/.local/share/fonts
 fc-cache
 rm -f /tmp/nerd.zip
 
 # INSTALL MONASPACE FONT
-MONASPACE_URL=$(curl -s https://api.github.com/repos/githubnext/monaspace/releases/latest | grep '"browser_download_url".*monaspace-variable.*\.zip' | cut -d '"' -f 4)
-curl -L -o /tmp/monaspace.zip "$MONASPACE_URL"
-unzip -jo /tmp/monaspace.zip -d ~/.local/share/fonts
+MONASPACE_URL=$(curl -sf https://api.github.com/repos/githubnext/monaspace/releases/latest | grep '"browser_download_url".*monaspace-variable.*\.zip' | cut -d '"' -f 4)
+curl -sfL -o /tmp/monaspace.zip "$MONASPACE_URL"
+unzip -qjo /tmp/monaspace.zip -d ~/.local/share/fonts
 fc-cache
 rm -f /tmp/monaspace.zip
 
