@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd
+cd || exit
 
 # UPGRADE
 sudo apt -y update
