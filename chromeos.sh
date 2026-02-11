@@ -47,23 +47,12 @@ shopt -s globstar
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 export EDITOR=vim
-command -v nvim >/dev/null 2>&1 && export EDITOR=nvim
 export VISUAL="$EDITOR"
 export GOPATH=$HOME/.local/share/go
 export GOBIN=$HOME/.local/bin
 export NODE_NO_WARNINGS=1
 export npm_config_ignore_scripts=true
 export npm_config_loglevel=error
-
-# shellcheck disable=SC2076
-if [ -d "$HOME/.npm/bin" ] && [[ ! ":$PATH:" =~ ":$HOME/.npm/bin:" ]]; then
-  export PATH="$HOME/.npm/bin:$PATH"
-fi
-
-# shellcheck disable=SC2076
-if [ -d "$HOME/.emacs.d/bin" ] && [[ ! ":$PATH:" =~ ":$HOME/.emacs.d/bin:" ]]; then
-  export PATH="$HOME/.emacs.d/bin:$PATH"
-fi
 
 eval "$(~/.local/bin/mise activate bash)"
 
@@ -97,8 +86,8 @@ alias egrep='egrep --color=auto'
 alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
-alias uv-recreate='rm -rf .venv && uv venv && find . -name "requirements.txt" -not -path "./node_modules/*" -not -path "./.venv/*" -exec uv pip install -r {} \;'
-alias venv-activate='source .venv/bin/activate'
+alias uv-recreate='rm -rf .venv && uv venv && find . -name "requirements*.txt" -not -path "./node_modules/*" -not -path "./.venv/*" -exec uv pip install -r {} \;'
+alias v='source .venv/bin/activate'
 alias fd='fd -H'
 [[ $TERM = 'xterm-kitty' ]] && alias rg='rg --hyperlink-format=kitty'
 
@@ -124,9 +113,6 @@ function morning-ritual {
     format_output mise upgrade -y
     eval "$(mise hook-env)"
     mise prune -y
-
-    [[ -f $HOME/.emacs.d/bin/doom ]] && format_output doom upgrade && format_output doom env
-    [[ -f $HOME/.local/bin/claude ]] && format_output claude update
 
     return 0
   ); then
@@ -195,6 +181,9 @@ starship = "latest"
 experimental = true
 
 [settings.python]
+compile = true
+
+[settings.ruby]
 compile = true
 
 EOF
