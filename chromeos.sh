@@ -67,7 +67,7 @@ source "$(mise where fd)"/*/autocomplete/fd.bash
 #eval "$(rustup completions bash rustup)"
 #eval "$(rustup completions bash cargo)"
 eval "$(mise completion bash --include-bash-completion-lib)"
-#eval "$(restic generate --bash-completion -)"
+#eval "$(command restic generate --bash-completion -)"
 eval "$(rg --generate complete-bash)"
 eval "$(starship completions bash)"
 #eval "$(gh completion -s bash)"
