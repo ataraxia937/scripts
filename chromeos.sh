@@ -9,10 +9,9 @@ sudo apt -qq --purge autoremove
 
 # INSTALL DEBS
 sudo apt -qq install apt-file build-essential dc flatpak git kitty libegl1 man-db ncdu podman rsync unzip
-sudo apt -qq install libbz2-dev libffi-dev libgdbm-compat-dev libgdbm-dev liblzma-dev libncurses-dev libreadline-dev libsqlite3-dev libssl-dev libzstd-dev pkg-config tk-dev uuid-dev zlib1g-dev # Python build deps
 
 # CREATE BASHRC
-cat > ~/.bashrc << 'EOF'
+cat >~/.bashrc <<'EOF'
 #!/bin/bash
 # shellcheck disable=SC1090,SC1091
 
@@ -143,10 +142,10 @@ curl -sfL https://mise.run | MISE_QUIET=1 sh
 
 # CONFIGURE PODMAN
 mkdir -p ~/.config/containers
-echo 'unqualified-search-registries = ["docker.io", "quay.io"]' > ~/.config/containers/registries.conf
+echo 'unqualified-search-registries = ["docker.io", "quay.io"]' >~/.config/containers/registries.conf
 
 # CONFIGURE VIM
-cat > ~/.vimrc <<'EOF'
+cat >~/.vimrc <<'EOF'
 unlet! skip_defaults_vim
 source $VIMRUNTIME/defaults.vim
 
@@ -165,7 +164,7 @@ EOF
 
 # INSTALL MISE TOOLS
 mkdir -p ~/.config/mise
-cat > ~/.config/mise/config.toml <<'EOF'
+cat >~/.config/mise/config.toml <<'EOF'
 [tools]
 node = "lts"
 python = "latest"
@@ -207,7 +206,7 @@ rm -f /tmp/monaspace.zip
 # CONFIGURE KITTY
 sudo gpasswd -a ataraxia937 render
 mkdir -p ~/.config/kitty
-cat > ~/.config/kitty/kitty.conf <<'EOF'
+cat >~/.config/kitty/kitty.conf <<'EOF'
 symbol_map U+23FB-U+23FE,U+2665,U+26A1,U+2B58,U+E000-U+E00A,U+E0A0-U+E0A3,U+E0B0-U+E0C8,U+E0CA,U+E0CC-U+E0D7,U+E200-U+E2A9,U+E300-U+E3E3,U+E5FA-U+E6B8,U+E700-U+E7C5,U+EA60-U+EC1E,U+F000-U+F2FF,U+F300-U+F372,U+F400-U+F533,U+F0001-U+F1AF0 Symbols Nerd Font
 font_size 11.0
 modify_font cell_height -2px

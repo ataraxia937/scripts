@@ -1,0 +1,38 @@
+[user]
+  name = Ray Kohler
+  email = ataraxia937@users.noreply.github.com
+
+[push]
+  default = current
+
+[credential "https://github.com"]
+  helper =
+  helper = !gh auth git-credential
+
+[credential "https://gist.github.com"]
+  helper =
+  helper = !gh auth git-credential
+
+[diff]
+  algorithm = histogram
+
+[core]
+  pager = delta
+  excludesFile = /home/rkohler/.config/git/ignore
+
+[interactive]
+  diffFilter = delta --color-only
+
+[merge]
+  conflictStyle = zdiff3
+
+[delta]
+  max-line-distance = 1.0
+  navigate = true
+  line-numbers = true
+  side-by-side = true
+  true-color = always
+  dark = true
+  light = false
+  plus-style = syntax "#004800"
+  plus-non-emph-style = syntax "#004800"

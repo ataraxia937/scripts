@@ -1,0 +1,20 @@
+[editor]
+bufferline = "multiple"
+cursorline = true
+cursorcolumn = true
+line-number = "relative"
+trim-trailing-whitespace = true
+
+[editor.indent-guides]
+render = true
+
+[editor.lsp]
+auto-signature-help = false
+display-inlay-hints = true
+display-progress-messages = true
+
+[editor.soft-wrap]
+enable = true
+
+[editor.statusline]
+right = ["diagnostics", "selections", "register", "position", "total-line-numbers", "file-encoding"]
