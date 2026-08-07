@@ -2,7 +2,7 @@
 
 set -ex
 
-pkg_add chromium noto-fonts noto-cjk sysclean
+pkg_add firefox noto-fonts noto-cjk sysclean
 
 chmod 600 /usr/local/bin/dbus-launch
 
@@ -52,13 +52,16 @@ alias ls='ls -F'
 USERPROFILE
 
 cat > /home/ataraxia/.tmux.conf <<'TMUX'
-​​set-option -g history-limit 10000
+set-option -g focus-events on
+​​set-option -g history-limit 100000
 set-option -g mode-keys vi
 set-option -g mouse on
 set-option -g prefix2 `
 set-option -g renumber-windows on
 set-option -gw window-status-current-style bg=red
 bind-key ` send-prefix -2
+bind-key a command-prompt -p SSH: "new-window -n %1 'ssh %1'"
+bind-key '"' split-window -v -c "#{pane_current_path}"
 TMUX
 
 cat >> /home/ataraxia/.Xdefaults <<'XDEFAULTS'
@@ -90,14 +93,6 @@ cat > /home/ataraxia/.cwmrc <<'CWM'
 fontname "sans:size=14"
 CWM
 
-mkdir /home/ataraxia/bin
-
-cat > /home/ataraxia/bin/chrome <<'CHROME'
-#!/bin/sh
-
-/usr/local/bin/chrome --force-device-scale-factor=1.25 "$@"
-CHROME
-
 cat > /home/ataraxia/.xsession <<'XSESSION'
 PATH=$HOME/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin
 export LC_CTYPE="en_US.UTF-8"
@@ -105,7 +100,7 @@ setxkbmap -option compose:caps
 xset s off
 xset dpms 0 0 0
 xterm &
-chrome &
+firefox &
 exec cwm
 XSESSION
 
@@ -115,4 +110,3 @@ mkdir /home/ataraxia/Downloads
 
 chown -R ataraxia:ataraxia /home/ataraxia
 chmod 755 /home/ataraxia/.xsession
-chmod 755 /home/ataraxia/bin/chrome
