@@ -1,0 +1,38 @@
+colorscheme tomorrow-night
+
+addhl global/ wrap -indent -word
+addhl global/ number-lines -relative
+
+map global user y '<a-|>wl-copy<ret>' -docstring 'yank to system clipboard'
+
+eval %sh{kak-lsp}
+
+hook -group lsp-filetype-javascript global BufSetOption filetype=(?:javascript|typescript) %{
+    set-option buffer lsp_servers %{
+        [tsgo]
+        command = "tsgo-lsp"
+        root_globs = ["package.json", "tsconfig.json", "jsconfig.json", ".git", ".hg"]
+    }
+}
+
+hook global WinSetOption filetype=(javascript|typescript) %{
+    set-option buffer modelinefmt ' %opt{lsp_modeline_breadcrumbs}%opt{lsp_modeline_code_actions}%opt{lsp_modeline_progress}%opt{lsp_modeline_message_requests} {red}E:%opt{lsp_diagnostic_error_count} {yellow}W:%opt{lsp_diagnostic_warning_count} {cyan}H:%opt{lsp_diagnostic_hint_count} {blue}H:%opt{lsp_diagnostic_hint_count} {default}| %val{bufname} %val{cursor_line}:%val{cursor_char_column} {{context_info}} {{mode_info}} - %val{client}@[%val{session}]'
+    lsp-enable-window
+    lsp-inlay-hints-enable window
+    lsp-inlay-diagnostics-enable window
+}
+
+map global user l ':enter-user-mode lsp<ret>' -docstring 'LSP mode'
+
+map global goto d <esc>:lsp-definition<ret> -docstring 'LSP definition'
+map global goto r <esc>:lsp-references<ret> -docstring 'LSP references'
+map global goto y <esc>:lsp-type-definition<ret> -docstring 'LSP type definition'
+
+map global insert <tab> '<a-;>:try lsp-snippets-select-next-placeholders catch %{ execute-keys -with-hooks <lt>tab> }<ret>' -docstring 'Select next snippet placeholder'
+
+map global object a '<a-semicolon>lsp-object<ret>' -docstring 'LSP any symbol'
+map global object <a-a> '<a-semicolon>lsp-object<ret>' -docstring 'LSP any symbol'
+map global object f '<a-semicolon>lsp-object Function Method<ret>' -docstring 'LSP function or method'
+map global object t '<a-semicolon>lsp-object Class Interface Module Namespace Struct<ret>' -docstring 'LSP class or module'
+map global object d '<a-semicolon>lsp-diagnostic-object error warning<ret>' -docstring 'LSP errors and warnings'
+map global object D '<a-semicolon>lsp-diagnostic-object error<ret>' -docstring 'LSP errors'
