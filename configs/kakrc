@@ -4,6 +4,11 @@ addhl global/ wrap -indent -word
 addhl global/ number-lines -relative
 
 map global user y '<a-|>wl-copy<ret>' -docstring 'yank to system clipboard'
+map global user p '!wl-paste<ret>' -docstring 'paste from system clipboard'
+map global user R '|wl-paste<ret>' -docstring 'replace with system clipboard'
+
+set-option global tabstop 2
+set-option global indentwidth 2
 
 eval %sh{kak-lsp}
 
