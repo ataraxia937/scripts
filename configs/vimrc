@@ -17,9 +17,33 @@ let g:ale_lsp_suggestions=1
 let g:ale_open_list=1
 
 set bg=dark
+set termguicolors
 colorscheme catppuccin
+highlight Normal guibg=NONE ctermbg=NONE
+highlight NonText guibg=NONE ctermbg=NONE
+highlight LineNr guibg=NONE ctermbg=NONE
+highlight SignColumn guibg=NONE ctermbg=NONE
 
 filetype plugin indent on
 
-nnoremap gd :ALEGoToDefinition<CR>
-nnoremap gr :ALEFindReferences<CR>
+nmap <silent> [w <Plug>(ale_previous_wrap)
+nmap <silent> ]w <Plug>(ale_next_wrap)
+nmap <silent> gd <Plug>(ale_go_to_definition)
+nmap <silent> gr <Plug>(ale_find_references)
+
+if !has('clipboard') && executable('wl-copy')
+  augroup WlClipboardSync
+    autocmd!
+    autocmd TextYankPost * if v:event.regname ==# ''
+          \ | call system('wl-copy', join(v:event.regcontents, "\n"))
+          \ | endif
+  augroup END
+
+	function! s:WlPaste()
+		let @" = system('wl-paste --no-newline')
+	endfunction
+
+	nnoremap <silent> p :call <SID>WlPaste()<CR>p
+	nnoremap <silent> P :call <SID>WlPaste()<CR>P
+	vnoremap <silent> p :call <SID>WlPaste()<CR>p
+endif
