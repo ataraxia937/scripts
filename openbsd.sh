@@ -7,7 +7,7 @@ pkg_add firefox noto-fonts noto-cjk sysclean
 chmod 600 /usr/local/bin/dbus-launch
 
 cat >/etc/unwind.conf <<'UNWIND'
-forwarder { 2620:fe::fe port 853 authentication name "dns.quad9.net" DoT }
+forwarder { 2606:4700:4700::1112 port 853 authentication name "security.cloudflare-dns.com" DoT }
 preference { DoT }
 UNWIND
 
@@ -85,7 +85,7 @@ mkdir -p /home/ataraxia/.config/gtk-3.0
 cat >/home/ataraxia/.config/gtk-3.0/settings.ini <<'GTK'
 [Settings]
 gtk-cursor-theme-name = Adwaita
-gtk-font-name = sans 12
+gtk-font-name = sans 14
 GTK
 
 cat >/home/ataraxia/.cwmrc <<'CWM'
