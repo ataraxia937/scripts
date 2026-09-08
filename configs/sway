@@ -166,18 +166,6 @@ bindsym $mod+r mode "resize"
     # Special key to take a screenshot with grim
     bindsym Print exec grim -g "$(slurp)"
 
-#
-# Status Bar:
-#
-# Read `man 5 sway-bar` for more information about this section.
-bar {
-    position top
-
-    # When the status_command prints a new line to stdout, swaybar updates.
-    # The default just shows the current date and time.
-    status_command while date +'%a %b %e %l:%M:%S'; do sleep 1; done
-}
-
 include /etc/sway/config.d/*
 
 font pango:Noto Sans 12
@@ -192,6 +180,8 @@ input * xkb_options "compose:caps"
 
 swaybg_command -
 
+exec swayidle -w
+
 output DP-4 resolution 1920x1200 position 0    0 scale 1.25
 output DP-6 resolution 1920x1200 position 1536 0 scale 1.25
 output eDP-1 disable
@@ -204,4 +194,65 @@ assign [app_id="firefox"] → "2"
 
 #output eDP-1 resolution 1920x1200 position 0 0 scale 1.25
 
-exec swayidle -w
+#
+# Catppuccin Mocha
+#
+set $rosewater #f5e0dc
+set $flamingo #f2cdcd
+set $pink #f5c2e7
+set $mauve #cba6f7
+set $red #f38ba8
+set $maroon #eba0ac
+set $peach #fab387
+set $yellow #f9e2af
+set $green #a6e3a1
+set $teal #94e2d5
+set $sky #89dceb
+set $sapphire #74c7ec
+set $blue #89b4fa
+set $lavender #b4befe
+set $text #cdd6f4
+set $subtext1 #bac2de
+set $subtext0 #a6adc8
+set $overlay2 #9399b2
+set $overlay1 #7f849c
+set $overlay0 #6c7086
+set $surface2 #585b70
+set $surface1 #45475a
+set $surface0 #313244
+set $base #1e1e2e
+set $mantle #181825
+set $crust #11111b
+
+# target                title_border bg    text      indicator  child_border
+client.focused          $lavender    $base $text     $rosewater $lavender
+client.focused_inactive $overlay0    $base $overlay1 $rosewater $overlay0
+client.unfocused        $overlay0    $base $overlay1 $rosewater $overlay0
+client.urgent           $peach       $base $peach    $overlay0  $peach
+client.placeholder      $overlay0    $base $text     $overlay0  $overlay0
+client.background       $base
+
+#
+# Status Bar:
+#
+# Read `man 5 sway-bar` for more information about this section.
+bar {
+    position top
+
+    colors {
+        background         $base
+        statusline         $text
+        focused_statusline $text
+        focused_separator  $base
+
+        # target           border bg        text
+        focused_workspace  $base  $mauve    $crust
+        active_workspace   $base  $surface2 $text
+        inactive_workspace $base  $base     $text
+        urgent_workspace   $base  $red      $crust
+    }
+
+    # When the status_command prints a new line to stdout, swaybar updates.
+    # The default just shows the current date and time.
+    status_command while date +'%a %b %e %l:%M:%S'; do sleep 1; done
+}
