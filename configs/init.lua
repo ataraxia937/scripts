@@ -10,9 +10,6 @@ vim.o.undofile = true
 
 vim.o.background = 'dark'
 vim.cmd.colorscheme "catppuccin"
-for _, group in ipairs({ 'Normal', 'NonText', 'LineNr', 'SignColumn' }) do
-  vim.api.nvim_set_hl(0, group, { bg = 'none' })
-end
 
 function _G.tabline()
   local current = vim.api.nvim_get_current_buf()

@@ -9,27 +9,23 @@ set softtabstop=2
 set tabstop=2
 set wrap
 
-packadd! ale
+"packadd! ale
 
-let g:ale_completion_enabled=1
-let g:ale_lsp_show_message_severity='information'
-let g:ale_lsp_suggestions=1
-let g:ale_open_list=1
+"let g:ale_completion_enabled=1
+"let g:ale_lsp_show_message_severity='information'
+"let g:ale_lsp_suggestions=1
+"let g:ale_open_list=1
 
 set bg=dark
 set termguicolors
 colorscheme catppuccin
-highlight Normal guibg=NONE ctermbg=NONE
-highlight NonText guibg=NONE ctermbg=NONE
-highlight LineNr guibg=NONE ctermbg=NONE
-highlight SignColumn guibg=NONE ctermbg=NONE
 
 filetype plugin indent on
 
-nmap <silent> [w <Plug>(ale_previous_wrap)
-nmap <silent> ]w <Plug>(ale_next_wrap)
-nmap <silent> gd <Plug>(ale_go_to_definition)
-nmap <silent> gr <Plug>(ale_find_references)
+"nmap <silent> [w <Plug>(ale_previous_wrap)
+"nmap <silent> ]w <Plug>(ale_next_wrap)
+"nmap <silent> gd <Plug>(ale_go_to_definition)
+"nmap <silent> gr <Plug>(ale_find_references)
 
 if !has('clipboard') && executable('wl-copy')
   augroup WlClipboardSync

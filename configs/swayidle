@@ -1,6 +1,2 @@
 before-sleep swaylock
-lock 'swaylock -f; swaymsg "output * dpms off"'
-unlock 'swaymsg "output * dpms on"'
-# Turns DPMS off again after idle while locked (handles mouse/keyboard bumps),
-# and arms the resume path so input wakes the display
-timeout 5 'if pgrep -x swaylock > /dev/null; then swaymsg "output * dpms off"; fi' resume 'swaymsg "output * dpms on"'
+lock 'swaylock -f'
