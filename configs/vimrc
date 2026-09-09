@@ -1,6 +1,7 @@
 set nocompatible
 set ruler
 set nomodeline
+set viminfo=
 set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc
 
 syntax on
