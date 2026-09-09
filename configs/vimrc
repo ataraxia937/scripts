@@ -22,6 +22,10 @@ nmap <silent> gr <Plug>(ale_find_references)
 set bg=dark
 set termguicolors
 colorscheme catppuccin
+highlight Normal guibg=NONE ctermbg=NONE
+highlight NonText guibg=NONE ctermbg=NONE
+highlight LineNr guibg=NONE ctermbg=NONE
+highlight SignColumn guibg=NONE ctermbg=NONE
 
 filetype plugin indent on
 
