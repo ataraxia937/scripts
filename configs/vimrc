@@ -15,6 +15,7 @@ set shiftwidth=2
 set smartindent
 set softtabstop=2
 set tabstop=2
+set expandtab
 set wrap
 
 nmap [b :bprev<CR>
@@ -39,20 +40,3 @@ highlight LineNr guibg=NONE ctermbg=NONE
 highlight SignColumn guibg=NONE ctermbg=NONE
 
 filetype plugin indent on
-
-if !has('clipboard') && executable('wl-copy')
-  augroup WlClipboardSync
-    autocmd!
-    autocmd TextYankPost * if v:event.regname ==# ''
-          \ | call system('wl-copy', join(v:event.regcontents, "\n"))
-          \ | endif
-  augroup END
-
-	function! s:WlPaste()
-		let @" = system('wl-paste --no-newline')
-	endfunction
-
-	nnoremap <silent> p :call <SID>WlPaste()<CR>p
-	nnoremap <silent> P :call <SID>WlPaste()<CR>P
-	vnoremap <silent> p :call <SID>WlPaste()<CR>p
-endif
