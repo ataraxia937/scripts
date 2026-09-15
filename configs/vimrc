@@ -1,36 +1,64 @@
 set nocompatible
+
+" key combo timeout
+set ttimeout
+set ttimeoutlen=100
+
+" display
+set display=truncate
+set relativenumber
+set showmode
+set showcmd
 set ruler
-set nomodeline
-set viminfo=
-set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc
+set scrolloff=5
+set cursorcolumn
+set cursorline
 
-syntax on
+" wrapping
+set wrap
+set linebreak
+set showbreak=↪
+set breakindentopt=shift:2,sbr
+set breakindent
 
-unlet! skip_defaults_vim
-source $VIMRUNTIME/defaults.vim
-
-set autoindent
-set clipboard=unnamedplus
+" tabs
 set shiftwidth=2
-set smartindent
 set softtabstop=2
 set tabstop=2
 set expandtab
-set wrap
+set smarttab
 
-nmap [b :bprev<CR>
-nmap ]b :bnext<CR>
+" indentation
+set autoindent
+set smartindent
+filetype plugin indent on
 
-packadd! ale
-let g:ale_completion_enabled=1
-let g:ale_lsp_show_message_severity='information'
-let g:ale_lsp_suggestions=1
-let g:ale_open_list=1
-nmap [w <Plug>(ale_previous_wrap)
-nmap ]w <Plug>(ale_next_wrap)
-nmap gd <Plug>(ale_go_to_definition)
-nmap gr <Plug>(ale_find_references)
+" searching
+set ignorecase
+set smartcase
+set incsearch
+set hlsearch
 
+" security
+set nomodeline
+set viminfo=
+set noexrc
+set secure
+
+" miscellaneous
+set clipboard=unnamedplus
+set nrformats-=octal
+set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc
+set mouse=a
+set mousefocus
+
+" mappings
+nnoremap [b :bprev<CR>
+nnoremap ]b :bnext<CR>
+inoremap <C-U> <C-G>u<C-U>
+
+" colors
+syntax on
 set bg=dark
 set termguicolors
 colorscheme lunaperche
@@ -39,4 +67,13 @@ highlight NonText guibg=NONE ctermbg=NONE
 highlight LineNr guibg=NONE ctermbg=NONE
 highlight SignColumn guibg=NONE ctermbg=NONE
 
-filetype plugin indent on
+" ALE
+packadd! ale
+let g:ale_completion_enabled=1
+let g:ale_lsp_show_message_severity='information'
+let g:ale_lsp_suggestions=1
+let g:ale_open_list=1
+nnoremap [w <Plug>(ale_previous_wrap)
+nnoremap ]w <Plug>(ale_next_wrap)
+nnoremap gd <Plug>(ale_go_to_definition)
+nnoremap gr <Plug>(ale_find_references)
