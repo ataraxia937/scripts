@@ -1,0 +1,277 @@
+#!/usr/bin/env python3
+"""LSP proxy that adapts tsgo for Kakoune (kak-lsp) and Helix compatibility.
+
+tsgo only supports pull diagnostics (textDocument/diagnostic requests); it
+pushes textDocument/publishDiagnostics on its own only for tsconfig-level
+errors. kak-lsp only ever listens for pushed publishDiagnostics and never
+sends a pull request, so without help it never sees type/syntax
+diagnostics at all. Helix already speaks pull diagnostics natively.
+
+DiagnosticsBridge inspects the client's initialize capabilities to tell
+the two apart: if the client didn't declare textDocument.diagnostic
+support, the bridge pulls on its behalf and synthesizes publishDiagnostics
+pushes; if it did (Helix), the bridge stays out of the way and this is a
+plain passthrough proxy (still patching the previousResultId bug below).
+
+Bridge clients also get every other unanswered server-to-client request
+(e.g. client/registerCapability) acked automatically: tsgo blocks further
+processing until it gets a reply, and a push-only client has no code path
+that would ever send one.
+"""
+
+from __future__ import annotations
+
+import asyncio
+import itertools
+import json
+import sys
+from typing import Any, Protocol
+
+
+class _Writer(Protocol):
+    def write(self, data: bytes) -> None: ...
+    async def drain(self) -> None: ...
+    def close(self) -> None: ...
+
+
+class _PipeWriter:
+    """Minimal StreamWriter-compatible wrapper over a pipe WriteTransport."""
+
+    def __init__(self, transport: asyncio.WriteTransport) -> None:
+        self._transport = transport
+
+    def write(self, data: bytes) -> None:
+        self._transport.write(data)
+
+    async def drain(self) -> None:
+        pass  # pipe transports have no high-level flow-control API
+
+    def close(self) -> None:
+        self._transport.close()
+
+
+TSGO = ["tsc", "--lsp", "--stdio"]  # adjust to your actual tsgo path/invocation
+
+
+def patch(msg: dict[str, Any]) -> dict[str, Any]:
+    """Remove null previousResultId fields that tsgo rejects."""
+    if (
+        msg.get("method") == "textDocument/diagnostic"
+        and "params" in msg
+        and msg["params"].get("previousResultId") is None
+    ):
+        msg["params"].pop("previousResultId", None)
+    return msg
+
+
+async def read_message(reader: asyncio.StreamReader) -> bytes | None:
+    """Read one LSP message from reader; return body bytes or None on EOF."""
+    header = b""
+    while not header.endswith(b"\r\n\r\n"):
+        byte = await reader.read(1)
+        if not byte:
+            return None
+        header += byte
+    length = int(
+        next(
+            p.split(b":")[1].strip()
+            for p in header.strip().split(b"\r\n")
+            if p.lower().startswith(b"content-length")
+        )
+    )
+    return await reader.readexactly(length)
+
+
+def frame(body: bytes) -> bytes:
+    """Wrap body bytes in an LSP Content-Length header frame."""
+    return f"Content-Length: {len(body)}\r\n\r\n".encode() + body
+
+
+class DiagnosticsBridge:
+    """Bridges tsgo's pull-only diagnostics to a push-only client.
+
+    Enabled only for clients that didn't declare pull-diagnostics support
+    in their initialize capabilities (e.g. kak-lsp). When enabled, every
+    didOpen/didChange forwarded to tsgo triggers a textDocument/diagnostic
+    pull, and the result is replayed to the client as a synthesized
+    publishDiagnostics notification. tsgo's workspace/diagnostic/refresh
+    requests are answered by re-pulling every open document, since a
+    push-only client has no code path that would otherwise respond to it.
+    Any other unanswered server-to-client request is acked the same way,
+    since tsgo stalls on it otherwise.
+
+    Disabled for clients that already declared pull-diagnostics support
+    (e.g. Helix): they issue their own textDocument/diagnostic requests
+    and handle server-to-client requests themselves, so the bridge stays
+    out of the way and this is a plain passthrough.
+    """
+
+    def __init__(self, tsgo_writer: _Writer, client_writer: _Writer) -> None:
+        self._tsgo_writer = tsgo_writer
+        self._client_writer = client_writer
+        self._next_id = itertools.count()
+        self._pending: dict[str, str] = {}
+        self._open_uris: set[str] = set()
+        self.enabled = True
+
+    def configure(self, initialize_params: dict[str, Any]) -> None:
+        """Enable bridging unless the client already declared pull-diagnostics support."""
+        text_document = (initialize_params.get("capabilities") or {}).get(
+            "textDocument"
+        ) or {}
+        self.enabled = "diagnostic" not in text_document
+
+    def track_open(self, uri: str) -> None:
+        self._open_uris.add(uri)
+
+    def forget(self, uri: str) -> None:
+        self._open_uris.discard(uri)
+        self._publish(uri, [])
+
+    async def request_diagnostics(self, uri: str) -> None:
+        req_id = f"proxy-diag-{next(self._next_id)}"
+        self._pending[req_id] = uri
+        await self._send_to_tsgo(
+            {
+                "jsonrpc": "2.0",
+                "id": req_id,
+                "method": "textDocument/diagnostic",
+                "params": {"textDocument": {"uri": uri}},
+            }
+        )
+
+    async def refresh_all(self) -> None:
+        for uri in list(self._open_uris):
+            await self.request_diagnostics(uri)
+
+    async def handle_tsgo_message(self, msg: dict[str, Any]) -> bool:
+        """Intercept diagnostic-pull responses and server-to-client requests.
+
+        Returns True if this message was a diagnostics-bridge concern and
+        must not be forwarded to the client as-is.
+        """
+        msg_id = msg.get("id")
+        if isinstance(msg_id, str) and msg_id in self._pending:
+            uri = self._pending.pop(msg_id)
+            if "error" in msg:
+                print(
+                    f"tsgo-lsp: diagnostic pull failed for {uri}: {msg['error']}",
+                    file=sys.stderr,
+                )
+            else:
+                result = msg.get("result") or {}
+                items = (
+                    result.get("items", [])
+                    if result.get("kind", "full") == "full"
+                    else []
+                )
+                self._publish(uri, items)
+            return True
+        if self.enabled and msg.get("method") == "workspace/diagnostic/refresh":
+            await self.refresh_all()
+            if msg_id is not None:
+                await self._send_to_tsgo(
+                    {"jsonrpc": "2.0", "id": msg_id, "result": None}
+                )
+            return True
+        if self.enabled and "method" in msg and msg_id is not None:
+            # tsgo blocks on unanswered server-to-client requests (e.g.
+            # client/registerCapability for config-file watching). A
+            # push-only client like ALE has no code path that answers
+            # arbitrary server requests, so ack on its behalf or tsgo
+            # never processes anything sent after this.
+            await self._send_to_tsgo(
+                {"jsonrpc": "2.0", "id": msg_id, "result": None}
+            )
+            return True
+        return False
+
+    async def _send_to_tsgo(self, msg: dict[str, Any]) -> None:
+        self._tsgo_writer.write(frame(json.dumps(msg).encode()))
+        await self._tsgo_writer.drain()
+
+    def _publish(self, uri: str, diagnostics: list[Any]) -> None:
+        self._client_writer.write(
+            frame(
+                json.dumps(
+                    {
+                        "jsonrpc": "2.0",
+                        "method": "textDocument/publishDiagnostics",
+                        "params": {"uri": uri, "diagnostics": diagnostics},
+                    }
+                ).encode()
+            )
+        )
+
+
+async def forward_to_tsgo(
+    reader: asyncio.StreamReader, writer: _Writer, bridge: DiagnosticsBridge
+) -> None:
+    """Forward client -> tsgo, patching messages and triggering diagnostic pulls when enabled."""
+    while True:
+        body = await read_message(reader)
+        if body is None:
+            writer.close()
+            return
+        msg = patch(json.loads(body))
+        writer.write(frame(json.dumps(msg).encode()))
+        await writer.drain()
+
+        method = msg.get("method")
+        if method == "initialize":
+            bridge.configure(msg.get("params") or {})
+            continue
+
+        uri = (msg.get("params") or {}).get("textDocument", {}).get("uri")
+        if not bridge.enabled or not uri:
+            continue
+        if method in ("textDocument/didOpen", "textDocument/didChange"):
+            bridge.track_open(uri)
+            await bridge.request_diagnostics(uri)
+        elif method == "textDocument/didClose":
+            bridge.forget(uri)
+
+
+async def forward_to_client(
+    reader: asyncio.StreamReader, writer: _Writer, bridge: DiagnosticsBridge
+) -> None:
+    """Forward tsgo -> client, diverting diagnostics-bridge traffic when enabled."""
+    while True:
+        body = await read_message(reader)
+        if body is None:
+            writer.close()
+            return
+        msg = json.loads(body)
+        if await bridge.handle_tsgo_message(msg):
+            continue
+        writer.write(frame(json.dumps(msg).encode()))
+        await writer.drain()
+
+
+async def main() -> None:
+    """Start tsgo subprocess and wire up bidirectional LSP forwarding."""
+    proc = await asyncio.create_subprocess_exec(
+        *TSGO,
+        stdin=asyncio.subprocess.PIPE,
+        stdout=asyncio.subprocess.PIPE,
+    )
+    if proc.stdin is None or proc.stdout is None:
+        raise RuntimeError("subprocess pipes unavailable")
+    loop = asyncio.get_running_loop()
+    client_reader = asyncio.StreamReader()
+    proto = asyncio.StreamReaderProtocol(client_reader)
+    await loop.connect_read_pipe(lambda: proto, sys.stdin)
+    client_writer_transport, _ = await loop.connect_write_pipe(
+        asyncio.BaseProtocol, sys.stdout.buffer
+    )
+    client_out = _PipeWriter(client_writer_transport)
+
+    bridge = DiagnosticsBridge(tsgo_writer=proc.stdin, client_writer=client_out)
+
+    await asyncio.gather(
+        forward_to_tsgo(client_reader, proc.stdin, bridge),
+        forward_to_client(proc.stdout, client_out, bridge),
+    )
+
+
+asyncio.run(main())

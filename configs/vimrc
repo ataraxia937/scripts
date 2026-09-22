@@ -13,6 +13,7 @@ set ruler
 set scrolloff=5
 set cursorcolumn
 set cursorline
+set laststatus=2
 
 " wrapping
 set wrap
@@ -69,6 +70,35 @@ highlight SignColumn guibg=NONE ctermbg=NONE
 
 " ALE
 packadd! ale
+
+function! s:GetProjectRoot(buf) abort
+    for l:name in ['package.json', 'pnpm-lock.yaml', 'yarn.lock']
+        let l:file = ale#path#FindNearestFile(a:buf, l:name)
+
+        if !empty(l:file)
+            return fnamemodify(l:file, ':h')
+        endif
+    endfor
+
+    return fnamemodify(bufname(a:buf), ':p:h')
+endfunction
+
+let s:tsgo_linter = {
+\   'name': 'tsgo',
+\   'lsp': 'stdio',
+\   'executable': '/usr/local/bin/tsgo-lsp',
+\   'command': '%e',
+\   'project_root': function('s:GetProjectRoot'),
+\}
+
+call ale#linter#Define('typescript', s:tsgo_linter)
+call ale#linter#Define('javascript', s:tsgo_linter)
+
+let g:ale_linters = {
+\   'typescript': ['tsgo'],
+\   'javascript': ['tsgo'],
+\}
+
 let g:ale_completion_enabled=1
 let g:ale_lsp_show_message_severity='information'
 let g:ale_lsp_suggestions=1
