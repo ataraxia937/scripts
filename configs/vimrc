@@ -47,7 +47,9 @@ set noexrc
 set secure
 
 " miscellaneous
-set clipboard=unnamedplus
+if !empty($WAYLAND_DISPLAY) || !empty($DISPLAY)
+  set clipboard=unnamedplus
+endif
 set nrformats-=octal
 set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc
 set mouse=a
@@ -69,8 +71,6 @@ highlight LineNr guibg=NONE ctermbg=NONE
 highlight SignColumn guibg=NONE ctermbg=NONE
 
 " ALE
-packadd! ale
-
 function! s:GetProjectRoot(buf) abort
     for l:name in ['package.json', 'pnpm-lock.yaml', 'yarn.lock']
         let l:file = ale#path#FindNearestFile(a:buf, l:name)
