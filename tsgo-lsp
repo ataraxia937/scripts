@@ -54,13 +54,34 @@ TSGO = ["tsc", "--lsp", "--stdio"]  # adjust to your actual tsgo path/invocation
 
 
 def patch(msg: dict[str, Any]) -> dict[str, Any]:
-    """Remove null previousResultId fields that tsgo rejects."""
+    """Remove null previousResultId fields that tsgo rejects, and prefer
+    markdown for hover content.
+
+    tsgo's plaintext hover response glues the quick-info signature and the
+    JSDoc summary together with no separator at all (e.g.
+    "...cdkVersion: stringMinimum version..."). Its markdown hover response
+    is fine: the signature comes back as its own fenced code block,
+    followed by the doc text as a separate paragraph. Clients (e.g. ALE)
+    that list plaintext before markdown in their hover contentFormat
+    preference hit the broken plaintext path, so bump markdown to the
+    front here instead of relying on every client to prefer it.
+    """
     if (
         msg.get("method") == "textDocument/diagnostic"
         and "params" in msg
         and msg["params"].get("previousResultId") is None
     ):
         msg["params"].pop("previousResultId", None)
+    if msg.get("method") == "initialize":
+        content_format = (
+            msg.get("params", {})
+            .get("capabilities", {})
+            .get("textDocument", {})
+            .get("hover", {})
+            .get("contentFormat")
+        )
+        if content_format and "markdown" in content_format:
+            content_format.sort(key=lambda kind: kind != "markdown")
     return msg
 
 
