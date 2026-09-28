@@ -1,16 +1,30 @@
-vim.loader.enable()
+-- don't load ALE from APT
+vim.g.loaded_ale_dont_use_this_in_other_plugins_please = 1
 
+-- use system clipboard
 vim.o.clipboard = 'unnamedplus'
-vim.opt.completeopt = { "fuzzy", "menu", "noinsert", "popup" }
-vim.o.modeline = false
-vim.o.relativenumber = true
+
+-- completions
+vim.opt.completeopt = { 'fuzzy', 'menu', 'noinsert', 'popup' }
+
+-- indentation
 vim.o.shiftwidth = 2
 vim.o.tabstop = 2
-vim.o.undofile = true
 
+-- security
+vim.o.modeline = false
+vim.o.undofile = false
+vim.opt.shadafile = 'NONE'
+
+-- appearance
+vim.o.relativenumber = true
 vim.o.background = 'dark'
-vim.cmd.colorscheme "catppuccin"
+vim.cmd.colorscheme('lunaperche')
+for _, group in ipairs({ 'Normal', 'NonText', 'LineNr', 'SignColumn' }) do
+  vim.api.nvim_set_hl(0, group, { bg = 'none' })
+end
 
+-- LSP
 vim.lsp.config('tsc', {
   cmd = { 'tsc', '--lsp', '--stdio' },
   filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
