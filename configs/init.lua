@@ -39,6 +39,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
       return
     end
 
+		vim.diagnostic.config({ virtual_text = true })
+
     vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
 
     -- tsc's native LSP hard-rejects any triggerCharacter it didn't itself
