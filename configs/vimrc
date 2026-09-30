@@ -44,6 +44,9 @@ set nomodeline
 set viminfo=
 set noexrc
 set secure
+let g:loaded_netrw = 1
+let g:loaded_netrwPlugin = 1
+let g:nogx = 1
 
 " miscellaneous
 if !empty($WAYLAND_DISPLAY) || !empty($DISPLAY)
