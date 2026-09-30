@@ -69,20 +69,23 @@ highlight NonText guibg=NONE ctermbg=NONE
 highlight LineNr guibg=NONE ctermbg=NONE
 highlight SignColumn guibg=NONE ctermbg=NONE
 
-" ALE
-function! s:GetProjectRoot(buf) abort
-    for l:name in ['package.json', 'pnpm-lock.yaml', 'yarn.lock']
-        let l:file = ale#path#FindNearestFile(a:buf, l:name)
+" ALE (not loaded for root)
+if systemlist('id -u')[0] ==# '0'
+    let g:loaded_ale_dont_use_this_in_other_plugins_please = 1
+else
+    function! s:GetProjectRoot(buf) abort
+        for l:name in ['package.json', 'pnpm-lock.yaml', 'yarn.lock']
+            let l:file = ale#path#FindNearestFile(a:buf, l:name)
 
-        if !empty(l:file)
-            return fnamemodify(l:file, ':h')
-        endif
-    endfor
+            if !empty(l:file)
+                return fnamemodify(l:file, ':h')
+            endif
+        endfor
 
-    return fnamemodify(bufname(a:buf), ':p:h')
-endfunction
+        return fnamemodify(bufname(a:buf), ':p:h')
+    endfunction
 
-let s:tsgo_linter = {
+    let s:tsgo_linter = {
 \   'name': 'tsgo',
 \   'lsp': 'stdio',
 \   'executable': '/usr/local/bin/tsgo-lsp',
@@ -90,19 +93,20 @@ let s:tsgo_linter = {
 \   'project_root': function('s:GetProjectRoot'),
 \}
 
-call ale#linter#Define('typescript', s:tsgo_linter)
-call ale#linter#Define('javascript', s:tsgo_linter)
+    call ale#linter#Define('typescript', s:tsgo_linter)
+    call ale#linter#Define('javascript', s:tsgo_linter)
 
-let g:ale_linters = {
+    let g:ale_linters = {
 \   'typescript': ['tsgo'],
 \   'javascript': ['tsgo'],
 \}
 
-let g:ale_completion_enabled=1
-let g:ale_lsp_show_message_severity='information'
-let g:ale_lsp_suggestions=1
-let g:ale_open_list=1
-nnoremap [w <Plug>(ale_previous_wrap)
-nnoremap ]w <Plug>(ale_next_wrap)
-nnoremap gd <Plug>(ale_go_to_definition)
-nnoremap gr <Plug>(ale_find_references)
+    let g:ale_completion_enabled=1
+    let g:ale_lsp_show_message_severity='information'
+    let g:ale_lsp_suggestions=1
+    let g:ale_open_list=1
+    nnoremap [w <Plug>(ale_previous_wrap)
+    nnoremap ]w <Plug>(ale_next_wrap)
+    nnoremap gd <Plug>(ale_go_to_definition)
+    nnoremap gr <Plug>(ale_find_references)
+endif
